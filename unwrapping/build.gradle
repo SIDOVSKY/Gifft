@@ -1,23 +1,22 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion buildConfig.compileSdk
     defaultConfig {
-        applicationId "com.gifft"
-
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
         versionCode buildConfig.version.code
         versionName buildConfig.version.name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
     }
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -33,8 +32,5 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:${versions.junit_android}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
 
-    implementation project(':core')
-    implementation project(':home')
-    implementation project(':wrapping')
-    implementation project(':unwrapping')
+    api project(':unwrapping-api')
 }

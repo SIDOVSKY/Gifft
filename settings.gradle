@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':core-api', ':core', ':home', ':wrapping', ':unwrapping', ':wrapping-api', ':unwrapping-api'
 rootProject.name='Gifft'
