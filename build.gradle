@@ -25,6 +25,7 @@ buildscript {
             'core_ktx'     : '1.2.0',
             'junit_android': '1.1.1',
             'espresso'     : '3.2.0',
+            'fragment'     : '1.2.4',
         ]
     }
 
