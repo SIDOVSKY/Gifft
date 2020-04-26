@@ -27,6 +27,7 @@ buildscript {
             'espresso'     : '3.2.0',
             'fragment'     : '1.2.4',
             'rxjava2'      : '2.2.19',
+            'material'     : '1.1.0',
         ]
     }
 
