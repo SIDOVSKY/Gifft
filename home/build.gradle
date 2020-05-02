@@ -20,6 +20,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    viewBinding {
+        enabled = true
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -27,6 +35,15 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
     implementation "androidx.core:core-ktx:${versions.core_ktx}"
+    implementation "androidx.fragment:fragment-ktx:${versions.fragment}"
+    implementation "androidx.lifecycle:lifecycle-extensions:${versions.lifecycle}"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycle}"
+    implementation "io.reactivex.rxjava2:rxjava:${versions.rxjava2}"
+    implementation "io.reactivex.rxjava2:rxkotlin:${versions.rxkotlin2}"
+    implementation "io.reactivex.rxjava2:rxandroid:${versions.rxandroid2}"
+    implementation "com.jakewharton.rxrelay2:rxrelay:${versions.rxrelay2}"
+    implementation "com.jakewharton.rxbinding3:rxbinding:${versions.rxbinding3}"
+    implementation "com.google.android.material:material:${versions.material}"
     testImplementation "junit:junit:${versions.junit}"
     androidTestImplementation "androidx.test.ext:junit:${versions.junit_android}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"

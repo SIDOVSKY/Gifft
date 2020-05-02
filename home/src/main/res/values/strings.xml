@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="wrap_button_title">Wrap</string>
+    <string name="no_gifts_message">NO GIFTS YET</string>
+</resources>
