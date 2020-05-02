@@ -44,6 +44,7 @@ dependencies {
     implementation "com.jakewharton.rxrelay2:rxrelay:${versions.rxrelay2}"
     implementation "com.jakewharton.rxbinding3:rxbinding:${versions.rxbinding3}"
     implementation "com.google.android.material:material:${versions.material}"
+
     testImplementation "junit:junit:${versions.junit}"
     androidTestImplementation "androidx.test.ext:junit:${versions.junit_android}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
