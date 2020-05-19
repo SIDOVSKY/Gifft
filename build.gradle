@@ -33,6 +33,7 @@ buildscript {
             'rxrelay2'     : '2.1.1',
             'rxbinding3'   : '3.1.0',
             'material'     : '1.1.0',
+            'dagger'       : '2.27',
         ]
     }
 

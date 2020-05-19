@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -44,6 +45,9 @@ dependencies {
     implementation "com.jakewharton.rxrelay2:rxrelay:${versions.rxrelay2}"
     implementation "com.jakewharton.rxbinding3:rxbinding:${versions.rxbinding3}"
     implementation "com.google.android.material:material:${versions.material}"
+
+    implementation "com.google.dagger:dagger:${versions.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
 
     testImplementation "junit:junit:${versions.junit}"
     androidTestImplementation "androidx.test.ext:junit:${versions.junit_android}"

@@ -11,8 +11,10 @@ import com.gifft.core.api.viewbindingholder.viewBind
 import com.gifft.home.databinding.GiftListFragmentBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
+import javax.inject.Inject
+import dagger.Lazy as DaggerLazy
 
-class GiftListFragment(
+abstract class GiftListFragment(
     newViewModel: Lazy<GiftListViewModel>
 ) : Fragment(R.layout.gift_list_fragment) {
 
@@ -60,3 +62,11 @@ class GiftListFragment(
         }
     }
 }
+
+class CreatedGiftListFragment @Inject constructor(
+    newViewModel: DaggerLazy<CreatedGiftListViewModel>
+) : GiftListFragment(lazy { newViewModel.get() })
+
+class ReceivedGiftListFragment @Inject constructor(
+    newViewModel: DaggerLazy<ReceivedGiftListViewModel>
+) : GiftListFragment(lazy { newViewModel.get() })

@@ -3,8 +3,9 @@ package com.gifft.home
 import com.gifft.core.api.gift.Gift
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import javax.inject.Inject
 
-class CreatedGiftListViewModel : GiftListViewModel() {
+class CreatedGiftListViewModel @Inject constructor() : GiftListViewModel() {
     private val _createdGifts = BehaviorSubject.create<List<Gift>>()
 
     override val gifts: Observable<List<Gift>> = _createdGifts

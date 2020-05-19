@@ -1,8 +1,10 @@
 package com.gifft.wrapping
 
 import androidx.fragment.app.Fragment
+import com.gifft.core.api.underdevelopment.UnderDevelopmentFragment
 import com.gifft.wrapping.api.WrappingFragmentProvider
+import javax.inject.Inject
 
-class WrappingFragmentProviderImpl : WrappingFragmentProvider {
+class WrappingFragmentProviderImpl @Inject constructor() : WrappingFragmentProvider {
     override fun provideClass(): Class<out Fragment> = WrappingFragment::class.java
 }
