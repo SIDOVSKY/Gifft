@@ -15,7 +15,7 @@ package com.gifft.core.api.fragmentresult
  * 3. Start fragment for result like this:
  *    ```
  *    val requestCode = 123
- *    val newFragmentForResult = SomeFragment.apply {
+ *    val newFragmentForResult = SomeFragment().apply {
  *        setTargetFragment(this@TargetFragment, requestCode)
  *    }
  *    ```
