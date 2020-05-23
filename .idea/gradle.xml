@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core-api" />
+            <option value="$PROJECT_DIR$/gift-ui" />
             <option value="$PROJECT_DIR$/home" />
             <option value="$PROJECT_DIR$/unwrapping" />
             <option value="$PROJECT_DIR$/unwrapping-api" />
