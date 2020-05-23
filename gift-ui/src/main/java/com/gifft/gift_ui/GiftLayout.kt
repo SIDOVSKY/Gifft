@@ -6,12 +6,15 @@ import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
+import android.os.Parcelable
 import android.util.AttributeSet
+import android.util.SparseArray
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.withTranslation
 import androidx.core.view.children
+import kotlinx.android.parcel.Parcelize
 import kotlin.math.max
 import kotlin.properties.Delegates
 
@@ -56,7 +59,7 @@ class GiftLayout @JvmOverloads constructor(
         addRect(10f, 0f, 90f, 60f, Path.Direction.CW)
         addRect(40f, 0f, 60f, 60f, Path.Direction.CCW) // Why not drawn with CW??
     }
-    
+
     private val capSourceSize = Size(100, 40)
     private val boxSourceSize = Size(100, 60)
 
@@ -73,6 +76,8 @@ class GiftLayout @JvmOverloads constructor(
     var isInteractive: Boolean
 
     init {
+        isSaveEnabled = true
+
         val ta =
             context.obtainStyledAttributes(attrs, R.styleable.GiftLayout, 0, 0)
         try {
@@ -335,6 +340,30 @@ class GiftLayout @JvmOverloads constructor(
         }
     }
 
+    override fun onSaveInstanceState(): Parcelable? =
+        SavedState(super.onSaveInstanceState(), isOpened, isInteractive)
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        (state as? SavedState)?.let {
+            super.onRestoreInstanceState(it.superSavedState)
+            isOpened = it.isOpened
+            isInteractive = it.isInteractive
+        }
+    }
+
+    override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>?) {
+        super.dispatchSaveInstanceState(container)
+
+        closedChildren.forEach { it.saveHierarchyState(container) }
+    }
+
+    override fun dispatchRestoreInstanceState(container: SparseArray<Parcelable>?) {
+        super.dispatchRestoreInstanceState(container)
+
+        closedChildren.forEach { it.restoreHierarchyState(container) }
+    }
+
+
     private fun positionCap() {
         // TODO add animation
         capOffset = if (isOpened) maxCapOffset else 0
@@ -350,6 +379,14 @@ class GiftLayout @JvmOverloads constructor(
             positionCap()
         }
     }
+
+    @Parcelize
+    private class SavedState(
+        val superSavedState: Parcelable?,
+        val isOpened: Boolean,
+        val isInteractive: Boolean
+    ) : Parcelable
+
 }
 
 data class Size(var width: Int = 0, var height: Int = 0)
