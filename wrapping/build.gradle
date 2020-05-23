@@ -28,6 +28,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
     implementation "androidx.core:core-ktx:${versions.core_ktx}"
+    implementation "androidx.constraintlayout:constraintlayout:${versions.constraint}"
 
     implementation "com.google.dagger:dagger:${versions.dagger}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
@@ -37,4 +38,5 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
 
     api project(':wrapping-api')
+    implementation project(':gift-ui')
 }
