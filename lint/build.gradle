@@ -2,8 +2,22 @@ apply plugin: 'java-library'
 apply plugin: 'kotlin'
 
 dependencies {
+    def lintVersion = '26.6.3'
+
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+
+    compileOnly "com.android.tools.lint:lint-api:$lintVersion"
+    compileOnly "com.android.tools.lint:lint-checks:$lintVersion"
+
+    testImplementation "junit:junit:4.13"
+    testImplementation "com.android.tools.lint:lint-tests:$lintVersion"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
+
+jar {
+    manifest {
+        attributes("Lint-Registry-v2": "com.gifft.lint.GifftIssueRegistry")
+    }
+}
