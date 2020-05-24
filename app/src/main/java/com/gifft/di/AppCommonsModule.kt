@@ -3,7 +3,6 @@ package com.gifft.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.gifft.core.api.di.AppApiProvider
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

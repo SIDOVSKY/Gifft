@@ -25,11 +25,12 @@
             android:layout_marginVertical="8dp"
             android:background="@color/colorAccent"
             android:gravity="center"
+            android:hint="@string/wrapping_input_hint"
             android:importantForAutofill="no"
             android:inputType="textMultiLine|textNoSuggestions"
             android:padding="8dp"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
-            tools:text="TEST TEST TEST" />
+            android:textColorHint="#cccccc"
+            android:textSize="20sp" />
     </com.gifft.gift_ui.GiftLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
