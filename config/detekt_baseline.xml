@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <Blacklist></Blacklist>
+  <Whitelist>
+    <ID>EmptyClassBlock:WrappingFragmentViewModel.kt$WrappingFragmentViewModel${ }</ID>
+    <ID>LongMethod:GiftLayout.kt$GiftLayout$onMeasure</ID>
+    <ID>MagicNumber:GiftLayout.kt$GiftLayout$0.99f</ID>
+    <ID>MagicNumber:GiftLayout.kt$GiftLayout$100</ID>
+    <ID>MagicNumber:GiftLayout.kt$GiftLayout$100f</ID>
+    <ID>MagicNumber:GiftLayout.kt$GiftLayout$10f</ID>
+    <ID>MagicNumber:GiftLayout.kt$GiftLayout$15f</ID>
+    <ID>MagicNumber:GiftLayout.kt$GiftLayout$20f</ID>
+    <ID>MagicNumber:GiftLayout.kt$GiftLayout$3</ID>
+    <ID>MagicNumber:GiftLayout.kt$GiftLayout$40</ID>
+    <ID>MagicNumber:GiftLayout.kt$GiftLayout$40f</ID>
+    <ID>MagicNumber:GiftLayout.kt$GiftLayout$4f</ID>
+    <ID>MagicNumber:GiftLayout.kt$GiftLayout$50f</ID>
+    <ID>MagicNumber:GiftLayout.kt$GiftLayout$60</ID>
+    <ID>MagicNumber:GiftLayout.kt$GiftLayout$60f</ID>
+    <ID>MagicNumber:GiftLayout.kt$GiftLayout$90f</ID>
+    <ID>MagicNumber:HomeViewModel.kt$HomeViewModel$300</ID>
+    <ID>PackageNaming:GiftLayout.kt$package com.gifft.gift_ui</ID>
+    <ID>SpreadOperator:AutoDispose.kt$(lifecycleOwner, disposeEvent, *this)</ID>
+    <ID>TooManyFunctions:GiftLayout.kt$GiftLayout$GiftLayout</ID>
+    <ID>UnnecessaryAbstractClass:Gift.kt$Gift</ID>
+  </Whitelist>
+</SmellBaseline>

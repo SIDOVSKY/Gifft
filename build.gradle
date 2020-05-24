@@ -51,6 +51,29 @@ buildscript {
     }
 }
 
+plugins {
+    id("io.gitlab.arturbosch.detekt").version("1.9.1")
+}
+
+detekt {
+    failFast = true
+    parallel = true
+    config = files("config/detekt.yml")
+    input = files(projectDir)
+    //baseline = file("config/detekt_baseline.xml")
+
+    reports {
+        html {
+            enabled = true
+            destination = file("build/reports/detekt.html")
+        }
+        xml.enabled = false
+        txt.enabled = false
+    }
+}
+
+tasks.detekt.jvmTarget = "1.8"
+
 allprojects {
     repositories {
         google()
