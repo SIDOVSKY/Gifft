@@ -62,11 +62,3 @@ abstract class GiftListFragment(
         }
     }
 }
-
-class CreatedGiftListFragment @Inject constructor(
-    newViewModel: DaggerLazy<CreatedGiftListViewModel>
-) : GiftListFragment(lazy { newViewModel.get() })
-
-class ReceivedGiftListFragment @Inject constructor(
-    newViewModel: DaggerLazy<ReceivedGiftListViewModel>
-) : GiftListFragment(lazy { newViewModel.get() })
