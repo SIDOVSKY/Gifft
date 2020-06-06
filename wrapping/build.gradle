@@ -21,17 +21,31 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
+    implementation "androidx.activity:activity-ktx:${versions.activity}"
     implementation "androidx.core:core-ktx:${versions.core_ktx}"
     implementation "androidx.constraintlayout:constraintlayout:${versions.constraint}"
+    implementation "com.google.android.material:material:${versions.material}"
+
+    implementation "io.reactivex.rxjava2:rxjava:${versions.rxjava2}"
+    implementation "io.reactivex.rxjava2:rxkotlin:${versions.rxkotlin2}"
+    implementation "io.reactivex.rxjava2:rxandroid:${versions.rxandroid2}"
+    implementation "com.jakewharton.rxrelay2:rxrelay:${versions.rxrelay2}"
+    implementation "com.jakewharton.rxbinding3:rxbinding:${versions.rxbinding3}"
 
     implementation "com.google.dagger:dagger:${versions.dagger}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
+    compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:${versions.assist_inject}"
+    kapt "com.squareup.inject:assisted-inject-processor-dagger2:${versions.assist_inject}"
 
     testImplementation "junit:junit:${versions.junit}"
     androidTestImplementation "androidx.test.ext:junit:${versions.junit_android}"
