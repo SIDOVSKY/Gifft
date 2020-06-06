@@ -18,7 +18,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 class WrappingFragment @Inject constructor(
-    viewModelFactory: WrappingFragmentViewModel.Factory
+    viewModelFactory: WrappingViewModel.Factory
 ) : Fragment(R.layout.wrapping_fragment) {
 
     private val viewModel by retain {
@@ -78,10 +78,10 @@ class WrappingFragment @Inject constructor(
 
     private fun onBackPressed() {
         when (viewModel.exitMode) {
-            WrappingFragmentViewModel.ExitMode.NoChanges -> {
+            WrappingViewModel.ExitMode.NoChanges -> {
                 parentFragmentManager.popBackStack()
             }
-            WrappingFragmentViewModel.ExitMode.New -> {
+            WrappingViewModel.ExitMode.New -> {
                 MaterialAlertDialogBuilder(requireContext())
                     .setMessage(getString(R.string.save_new_gift_as_draft))
                     .setNegativeButton(getString(R.string.delete)) { _, _ ->
@@ -93,7 +93,7 @@ class WrappingFragment @Inject constructor(
                     }
                     .show()
             }
-            WrappingFragmentViewModel.ExitMode.Edited -> {
+            WrappingViewModel.ExitMode.Edited -> {
                 MaterialAlertDialogBuilder(requireContext())
                     .setMessage(getString(R.string.save_gift_editings))
                     .setNegativeButton(getString(R.string.no)) { _, _ ->
@@ -105,7 +105,7 @@ class WrappingFragment @Inject constructor(
                     }
                     .show()
             }
-            WrappingFragmentViewModel.ExitMode.Cleaned -> {
+            WrappingViewModel.ExitMode.Cleaned -> {
                 MaterialAlertDialogBuilder(requireContext())
                     .setMessage(getString(R.string.gift_cleaned_message))
                     .setNegativeButton(getString(R.string.save_cleaned_gift)) { _, _ ->

@@ -14,13 +14,13 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 @SuppressLint("CheckResult") // applicable to class only
-class WrappingFragmentViewModel @AssistedInject constructor(
+class WrappingViewModel @AssistedInject constructor(
     @Assisted navParam: WrappingNavParam,
     private val giftRepository: GiftRepository
 ) {
     @AssistedInject.Factory
     interface Factory {
-        fun create(navParam: WrappingNavParam): WrappingFragmentViewModel
+        fun create(navParam: WrappingNavParam): WrappingViewModel
     }
 
     private val _senderRelay = BehaviorRelay.createDefault("")
