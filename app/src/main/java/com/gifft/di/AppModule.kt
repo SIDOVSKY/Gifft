@@ -8,7 +8,7 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class AppCommonsModule {
+class AppModule {
     companion object {
         private const val PREFS_NAME = "GIFFT_PREFS"
     }
