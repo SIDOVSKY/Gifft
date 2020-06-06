@@ -1,24 +1,29 @@
 package com.gifft.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.ListAdapter
 import com.gifft.core.api.autoDispose
 import com.gifft.core.api.databinding.ProgressBinding
+import com.gifft.core.api.gift.TextGift
+import com.gifft.core.api.recycler.setAdapter
 import com.gifft.core.api.retain.retain
 import com.gifft.core.api.viewbindingholder.viewBind
 import com.gifft.home.databinding.GiftListFragmentBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
-import javax.inject.Inject
-import dagger.Lazy as DaggerLazy
 
 abstract class GiftListFragment(
     newViewModel: Lazy<GiftListViewModel>
 ) : Fragment(R.layout.gift_list_fragment) {
 
-    private val viewModel by retain { newViewModel.value }
+    protected open val viewModel by retain(
+        producer = { newViewModel.value },
+        onClean = { dispose() })
+
+    protected abstract val giftListAdapter: ListAdapter<TextGift, *>
 
     private val viewBinding by viewBind(GiftListFragmentBinding::bind)
 
@@ -29,7 +34,13 @@ abstract class GiftListFragment(
             // ViewBinding import for included layout from different module is not supported yet :(
             val progressBinding = ProgressBinding.bind(root.findViewById(R.id.progress))
 
+            giftList.setAdapter(giftListAdapter, viewLifecycleOwner)
+
             arrayOf(
+                viewModel.gifts
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { giftListAdapter.submitList(it) },
+
                 viewModel.state
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {

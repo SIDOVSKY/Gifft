@@ -36,6 +36,7 @@ buildscript {
             'dagger'       : '2.27',
             'constraint'   : '1.1.3',
             'objectbox'    : '2.5.1',
+            'swipelayout'  : '1.3.0',
         ]
     }
 
@@ -79,7 +80,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-
+        maven { url 'https://jitpack.io' }
     }
 }
 

@@ -2,4 +2,11 @@
 <resources>
     <string name="wrap_button_title">Wrap</string>
     <string name="no_gifts_message">NO GIFTS YET</string>
+    <string name="gift_item_delete">DELETE</string>
+    <string name="gift_item_to">To:</string>
+    <string name="gift_item_from">From:</string>
+    <string name="gift_item_unknown_receiver">(not specified)</string>
+    <string name="gift_item_no_content_to_send">(no content inside yet)</string>
+    <string name="gift_item_unknown_sender">ANONYMOUS</string>
+    <string name="gift_item_no_content_received">nothing inside :(</string>
 </resources>
