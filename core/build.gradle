@@ -29,6 +29,13 @@ dependencies {
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
     implementation "androidx.core:core-ktx:${versions.core_ktx}"
 
+    implementation "io.reactivex.rxjava2:rxjava:${versions.rxjava2}"
+    implementation "io.reactivex.rxjava2:rxkotlin:${versions.rxkotlin2}"
+    implementation "io.objectbox:objectbox-android:${versions.objectbox}"
+    implementation "io.objectbox:objectbox-kotlin:${versions.objectbox}"
+    implementation "io.objectbox:objectbox-rxjava:${versions.objectbox}"
+    kapt "io.objectbox:objectbox-processor:${versions.objectbox}"
+
     implementation "com.google.dagger:dagger:${versions.dagger}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
 
