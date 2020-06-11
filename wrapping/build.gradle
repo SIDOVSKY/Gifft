@@ -48,6 +48,7 @@ dependencies {
     kapt "com.squareup.inject:assisted-inject-processor-dagger2:${versions.assist_inject}"
 
     testImplementation "junit:junit:${versions.junit}"
+    testImplementation "org.mockito:mockito-core:${versions.mockito}"
     androidTestImplementation "androidx.test.ext:junit:${versions.junit_android}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
 
