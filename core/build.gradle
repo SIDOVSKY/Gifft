@@ -15,6 +15,12 @@ android {
         consumerProguardFiles 'consumer-rules.pro'
     }
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -40,6 +46,14 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
 
     testImplementation "junit:junit:${versions.junit}"
+    testImplementation "org.robolectric:robolectric:${versions.robolectric}"
+    testImplementation "androidx.test:core:${versions.androidx_test}"
+    testImplementation "androidx.test.ext:junit-ktx:${versions.junit_ktx}"
+
+    testImplementation "io.objectbox:objectbox-linux:${versions.objectbox}"
+    testImplementation "io.objectbox:objectbox-macos:${versions.objectbox}"
+    testImplementation "io.objectbox:objectbox-windows:${versions.objectbox}"
+
     androidTestImplementation "androidx.test.ext:junit:${versions.junit_android}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
 

@@ -15,6 +15,12 @@ android {
         consumerProguardFiles 'consumer-rules.pro'
     }
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -24,6 +30,10 @@ android {
 
     viewBinding {
         enabled = true
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
@@ -49,6 +59,13 @@ dependencies {
 
     testImplementation "junit:junit:${versions.junit}"
     testImplementation "org.mockito:mockito-core:${versions.mockito}"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockito_ktx}"
+    testImplementation "org.robolectric:robolectric:${versions.robolectric}"
+    testImplementation "androidx.test:core:${versions.androidx_test}"
+    testImplementation "androidx.test.ext:junit-ktx:${versions.junit_ktx}"
+    testImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
+
+    debugImplementation "androidx.fragment:fragment-testing:${versions.fragment_test}"
     androidTestImplementation "androidx.test.ext:junit:${versions.junit_android}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
 
