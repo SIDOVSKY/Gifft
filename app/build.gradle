@@ -28,6 +28,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     lintOptions {
         ignoreTestSources true
         abortOnError true
@@ -46,8 +50,10 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
 
     testImplementation "junit:junit:${versions.junit}"
-    androidTestImplementation "androidx.test.ext:junit:${versions.junit_android}"
+    androidTestImplementation "androidx.test.ext:junit-ktx:${versions.junit_android}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
+    androidTestImplementation "androidx.test:core-ktx:${versions.androidx_test}"
+    androidTestImplementation "com.agoda.kakao:kakao:${versions.kakao}"
 
     implementation project(':core')
     implementation project(':home')
