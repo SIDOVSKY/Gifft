@@ -119,6 +119,7 @@ class WrappingFragment @Inject constructor(
                         viewModel.deleteButtonClick.accept(Unit)
                         parentFragmentManager.popBackStack()
                     }
+                    .show()
             }
         }
     }
