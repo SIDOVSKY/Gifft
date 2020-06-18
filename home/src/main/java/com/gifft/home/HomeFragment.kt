@@ -1,11 +1,13 @@
 package com.gifft.home
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.commit
 import androidx.lifecycle.Lifecycle
+import androidx.transition.Fade
 import com.gifft.core.api.ViewPager2FragmentClassesAdapter
 import com.gifft.core.api.autoDispose
 import com.gifft.core.api.retain.retain
@@ -40,6 +42,7 @@ class HomeFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         with(viewBinding!!) {
+
             pager.apply {
                 isUserInputEnabled = false
                 adapter = ViewPager2FragmentClassesAdapter(
@@ -67,11 +70,26 @@ class HomeFragment @Inject constructor(
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
                         parentFragmentManager.commit {
-                            replace(
-                                id,
-                                wrappingFragmentProvider.provideClass(),
-                                WrappingNavParam(null).toNavBundle()
-                            )
+                            enterTransition = Fade().addTarget(wrapButton)
+                            exitTransition = Fade().addTarget(wrapButton)
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                wrapButton.transitionName = getString(R.string.fab_transition_name)
+                                addSharedElement(wrapButton, wrapButton.transitionName)
+                            }
+
+                            val wrappingFragment = fragmentFactory.instantiate(
+                                requireContext().classLoader,
+                                wrappingFragmentProvider.provideClass().name
+                            ).apply {
+                                arguments = WrappingNavParam(null).toNavBundle()
+                                sharedElementEnterTransition = Fade().setDuration(1)
+                                sharedElementReturnTransition = Fade()
+                                enterTransition = Fade()
+                                exitTransition = Fade()
+                            }
+
+                            replace(id,  wrappingFragment)
                             addToBackStack(null)
                         }
                     }

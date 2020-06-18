@@ -5,4 +5,5 @@
     <string name="save">Save</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="fab_transition_name">FAB_TRANSITION</string>
 </resources>

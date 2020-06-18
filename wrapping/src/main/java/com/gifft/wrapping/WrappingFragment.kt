@@ -1,5 +1,6 @@
 package com.gifft.wrapping
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
@@ -39,6 +40,11 @@ class WrappingFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         with(viewBinding!!) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                sendButton.transitionName = getString(R.string.fab_transition_name)
+            }
+
             arrayOf(
                 sendButton.clicks()
                     .subscribe(viewModel.sendButtonClick),
