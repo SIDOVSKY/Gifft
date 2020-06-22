@@ -16,10 +16,42 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        debug {
+            def keystoreProperties = loadProperties('debugKeystore.properties')
+            if (keystoreProperties.isEmpty()) {
+                logger.warn('Debug keystore not found. Some modules may not work properly in Debug builds')
+                return
+            }
+
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+
+        release {
+            def keystoreProperties = loadProperties('releaseKeystore.properties')
+            if (keystoreProperties.isEmpty()) {
+                logger.warn('Release keystore not found. Some modules may not work properly in Release builds')
+                return
+            }
+
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
@@ -61,4 +93,15 @@ dependencies {
     implementation project(':unwrapping')
 
     lintChecks project(':lint')
+}
+
+private Properties loadProperties(String propertiesFilePath) {
+    def keystoreProperties = new Properties()
+
+    def keystorePropertiesFile = file(propertiesFilePath)
+    if (keystorePropertiesFile.exists()) {
+        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    }
+
+    return keystoreProperties
 }
