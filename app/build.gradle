@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: "com.betomorrow.appcenter"
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -69,6 +70,23 @@ android {
         abortOnError true
         xmlReport false
         checkDependencies true
+    }
+}
+
+appcenter {
+    // ./gradlew appCenterUploadRelease -PAPPCENTER_API_TOKEN=...
+    // or ENV variable
+    def apiTokenParameter = project.properties.get("APPCENTER_API_TOKEN", null)
+    if (apiTokenParameter != null) {
+        apiToken = apiTokenParameter
+    }
+    ownerName = "sidovsky"
+    distributionGroups = ["Collaborators"]
+    notifyTesters = true
+    apps {
+        release {
+            appName = "Gifft"
+        }
     }
 }
 
