@@ -19,6 +19,11 @@ android {
         unitTests {
             includeAndroidResources = true
         }
+        // For robolectric in jenkins pass: -Duser.home=${env.WORKSPACE}
+        // fixes: Couldn't create lock file ?/.robolectric-download-lock
+        unitTests.all {
+            systemProperty 'user.home', System.getProperty('user.home')
+        }
     }
 
     buildTypes {

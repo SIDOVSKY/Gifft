@@ -26,7 +26,7 @@ pipeline {
     }
     stage('UNIT TEST') {
       steps {
-        sh "./gradlew testDebugUnitTest"
+        sh "./gradlew testDebugUnitTest -Duser.home=${env.WORKSPACE}"
       }
     }
     stage('Publish') {
