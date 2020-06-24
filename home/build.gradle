@@ -57,6 +57,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
 
     api project(':core-api')
+    api project(':gift-api')
     api project(':wrapping-api')
     api project(':unwrapping-api')
 }

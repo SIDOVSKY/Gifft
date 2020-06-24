@@ -1,9 +1,9 @@
-package com.gifft.core.di
+package com.gifft.gift.di
 
 import android.content.Context
-import com.gifft.core.api.gift.GiftRepository
-import com.gifft.core.gift.GiftRepositoryImpl
-import com.gifft.core.gift.MyObjectBox
+import com.gifft.gift.GiftRepositoryImpl
+import com.gifft.gift.MyObjectBox
+import com.gifft.gift.api.GiftRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -12,10 +12,10 @@ import javax.inject.Singleton
 
 @Module(
     includes = [
-        CoreModule.Declarations::class
+        GiftModule.Declarations::class
     ]
 )
-internal object CoreModule {
+internal object GiftModule {
 
     @Module
     interface Declarations {

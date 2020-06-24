@@ -5,8 +5,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import com.gifft.core.api.gift.GiftRepository
-import com.gifft.core.api.gift.TextGift
+import com.gifft.gift.api.GiftRepository
+import com.gifft.gift.api.TextGift
 import com.gifft.core.api.toNavBundle
 import com.gifft.wrapping.api.WrappingNavParam
 import com.nhaarman.mockitokotlin2.argThat

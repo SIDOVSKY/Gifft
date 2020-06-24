@@ -1,8 +1,8 @@
 package com.gifft.wrapping
 
 import android.annotation.SuppressLint
-import com.gifft.core.api.gift.GiftRepository
-import com.gifft.core.api.gift.TextGift
+import com.gifft.gift.api.GiftRepository
+import com.gifft.gift.api.TextGift
 import com.gifft.wrapping.api.WrappingNavParam
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay

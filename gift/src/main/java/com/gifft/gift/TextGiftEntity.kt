@@ -1,4 +1,4 @@
-package com.gifft.core.gift
+package com.gifft.gift
 
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity

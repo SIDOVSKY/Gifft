@@ -1,7 +1,7 @@
 package com.gifft.home
 
-import com.gifft.core.api.gift.GiftRepository
-import com.gifft.core.api.gift.TextGift
+import com.gifft.gift.api.GiftRepository
+import com.gifft.gift.api.TextGift
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.BehaviorSubject

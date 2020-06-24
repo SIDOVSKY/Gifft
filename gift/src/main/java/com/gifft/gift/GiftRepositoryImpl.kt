@@ -1,7 +1,7 @@
-package com.gifft.core.gift
+package com.gifft.gift
 
-import com.gifft.core.api.gift.GiftRepository
-import com.gifft.core.api.gift.TextGift
+import com.gifft.gift.api.GiftRepository
+import com.gifft.gift.api.TextGift
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
 import io.objectbox.kotlin.query

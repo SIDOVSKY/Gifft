@@ -1,4 +1,4 @@
-package com.gifft.core.gift
+package com.gifft.gift
 
 import io.objectbox.BoxStore
 import org.junit.rules.ExternalResource

@@ -108,6 +108,7 @@ dependencies {
     androidTestImplementation "com.agoda.kakao:kakao:${versions.kakao}"
 
     implementation project(':core')
+    implementation project(':gift')
     implementation project(':home')
     implementation project(':wrapping')
     implementation project(':unwrapping')

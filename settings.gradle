@@ -2,3 +2,4 @@ include ':app', ':core-api', ':core', ':home', ':wrapping', ':unwrapping', ':wra
 rootProject.name='Gifft'
 include ':lint'
 include ':gift'
+include ':gift-api'

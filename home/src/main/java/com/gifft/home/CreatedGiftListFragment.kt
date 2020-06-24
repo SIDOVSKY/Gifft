@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.commit
 import androidx.lifecycle.Lifecycle
 import com.gifft.core.api.autoDispose
-import com.gifft.core.api.gift.TextGift
+import com.gifft.gift.api.TextGift
 import com.gifft.core.api.recycler.BindingAdapter
 import com.gifft.core.api.recycler.SequenceDiffCallback
 import com.gifft.core.api.toNavBundle

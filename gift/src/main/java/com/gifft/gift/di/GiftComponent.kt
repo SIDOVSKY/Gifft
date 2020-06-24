@@ -1,25 +1,23 @@
-package com.gifft.core.di
+package com.gifft.gift.di
 
 import com.gifft.core.api.di.AppApiProvider
-import com.gifft.core.api.gift.GiftRepository
+import com.gifft.gift.api.di.GiftApiProvider
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
 @Component(
     modules = [
-        CoreModule::class
+        GiftModule::class
     ],
     dependencies = [
         AppApiProvider::class
     ]
 )
-interface CoreComponent {
+interface GiftComponent : GiftApiProvider {
     companion object {
-        fun create(appApiProvider: AppApiProvider): CoreComponent = DaggerCoreComponent.builder()
+        fun create(appApiProvider: AppApiProvider): GiftComponent = DaggerGiftComponent.builder()
             .appApiProvider(appApiProvider)
             .build()
     }
-
-    fun provideGiftRepository(): GiftRepository
 }

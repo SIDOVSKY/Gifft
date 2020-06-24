@@ -3,7 +3,8 @@ package com.gifft.di
 import com.gifft.core.api.di.AppApiProvider
 import com.gifft.core.api.di.CoreApiProvider
 import com.gifft.core.di.CoreCommonsModule
-import com.gifft.core.di.CoreComponent
+import com.gifft.gift.api.di.GiftApiProvider
+import com.gifft.gift.di.GiftComponent
 import com.gifft.home.di.HomeCommonsModule
 import com.gifft.wrapping.api.di.WrappingApiProvider
 import com.gifft.wrapping.di.WrappingCommonsModule
@@ -13,6 +14,7 @@ import dagger.Component
 interface ApiProviderAggregation :
     AppApiProvider,
     CoreApiProvider,
+    GiftApiProvider,
     WrappingApiProvider
 
 /**
@@ -40,7 +42,7 @@ interface ApiProviderAggregation :
     ],
     dependencies = [
         AppComponent::class,
-        CoreComponent::class
+        GiftComponent::class
     ]
 )
 interface CommonsComponent : ApiProviderAggregation {
@@ -48,12 +50,12 @@ interface CommonsComponent : ApiProviderAggregation {
     companion object {
         fun create(appModule: AppModule): CommonsComponent {
             val appComponent = AppComponent.create(appModule)
-            val coreComponent = CoreComponent.create(appComponent)
+            val giftComponent = GiftComponent.create(appComponent)
 
             return DaggerCommonsComponent
                 .builder()
                 .appComponent(appComponent)
-                .coreComponent(coreComponent)
+                .giftComponent(giftComponent)
                 .build()
         }
     }

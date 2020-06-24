@@ -1,6 +1,6 @@
-package com.gifft.core.gift
+package com.gifft.gift
 
-import com.gifft.core.api.gift.TextGift
+import com.gifft.gift.api.TextGift
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test

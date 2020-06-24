@@ -7,7 +7,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.ListAdapter
 import com.gifft.core.api.autoDispose
 import com.gifft.core.api.databinding.ProgressBinding
-import com.gifft.core.api.gift.TextGift
+import com.gifft.gift.api.TextGift
 import com.gifft.core.api.recycler.setAdapter
 import com.gifft.core.api.retain.retain
 import com.gifft.core.api.viewbindingholder.viewBind

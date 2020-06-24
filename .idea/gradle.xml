@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core-api" />
             <option value="$PROJECT_DIR$/gift" />
+            <option value="$PROJECT_DIR$/gift-api" />
             <option value="$PROJECT_DIR$/gift-ui" />
             <option value="$PROJECT_DIR$/home" />
             <option value="$PROJECT_DIR$/lint" />

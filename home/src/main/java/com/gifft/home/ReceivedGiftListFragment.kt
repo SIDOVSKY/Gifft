@@ -1,6 +1,6 @@
 package com.gifft.home
 
-import com.gifft.core.api.gift.TextGift
+import com.gifft.gift.api.TextGift
 import com.gifft.core.api.recycler.BindingAdapter
 import com.gifft.core.api.recycler.SequenceDiffCallback
 import com.gifft.home.databinding.GiftListItemReceivedBinding

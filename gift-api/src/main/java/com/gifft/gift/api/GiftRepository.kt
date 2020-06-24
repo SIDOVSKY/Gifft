@@ -1,4 +1,4 @@
-package com.gifft.core.api.gift
+package com.gifft.gift.api
 
 import io.reactivex.Observable
 

@@ -1,4 +1,4 @@
-package com.gifft.core.gift
+package com.gifft.gift
 
 import io.objectbox.converter.PropertyConverter
 

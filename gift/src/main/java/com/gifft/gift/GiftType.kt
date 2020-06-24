@@ -1,4 +1,4 @@
-package com.gifft.core.gift
+package com.gifft.gift
 
 enum class GiftType {
     Unknown,
