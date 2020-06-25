@@ -6,7 +6,6 @@ pipeline {
       args '-it --memory=4g --cpus="3"'
     }
   }
-
   stages {
     stage('PREPARE') {
       steps {
@@ -26,6 +25,11 @@ pipeline {
       steps {
         sh "./gradlew appCenterUploadRelease"
       }
+    }
+  }
+  post {
+    always {
+      cleanWs()
     }
   }
 }
