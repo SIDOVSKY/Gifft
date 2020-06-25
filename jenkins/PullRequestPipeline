@@ -19,11 +19,6 @@ pipeline {
         sh "./gradlew lintDebug"
       }
     }
-    stage('BUILD') {
-      steps {
-        sh "./gradlew clean assembleDebug"
-      }
-    }
     stage('UNIT TEST') {
       steps {
         sh "./gradlew testDebugUnitTest -Duser.home=${env.WORKSPACE}"
