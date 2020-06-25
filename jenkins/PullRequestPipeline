@@ -1,0 +1,39 @@
+#!groovy
+pipeline {
+  agent {
+    docker {
+      image 'sidovsky/android_sdk'
+      args '-it --memory=4g --cpus="3"'
+    }
+  }
+
+  stages {
+    stage('PREPARE') {
+      steps {
+        sh "chmod +x gradlew"
+        loadKeystores()
+      }
+    }
+    stage ('LINT CHECK') {
+      steps {
+        sh "./gradlew lintDebug"
+      }
+    }
+    stage('UNIT TEST') {
+      steps {
+        sh "./gradlew testDebugUnitTest -Duser.home=${env.WORKSPACE}"
+      }
+    }
+  }
+}
+
+def loadKeystores() {
+  def keystorePath = "./app"
+  withCredentials([
+    file(credentialsId: 'keystore', variable: 'keystore'),
+    file(credentialsId: 'keystore_properties', variable: 'ksProperties')
+  ]) {
+    sh "cp -f $keystore $keystorePath/releaseKeystore.jks" // THATS OK
+    sh "cp -f $ksProperties $keystorePath/debugKeystore.properties"
+  }
+}

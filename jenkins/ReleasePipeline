@@ -14,22 +14,12 @@ pipeline {
         loadKeystores()
       }
     }
-    stage ('CHECK') {
-      steps {
-        sh "./gradlew lint"
-      }
-    }
     stage('BUILD') {
       steps {
-        sh "./gradlew clean assemble"
+        sh "./gradlew clean assembleRelease"
       }
     }
-    stage('UNIT TEST') {
-      steps {
-        sh "./gradlew testDebugUnitTest -Duser.home=${env.WORKSPACE}"
-      }
-    }
-    stage('Publish') {
+    stage('PUBLISH') {
       environment {
         APPCENTER_API_TOKEN = credentials('APPCENTER_API_TOKEN')
       }
@@ -47,7 +37,6 @@ def loadKeystores() {
     file(credentialsId: 'keystore_properties', variable: 'ksProperties')
   ]) {
     sh "cp -f $keystore $keystorePath/releaseKeystore.jks"
-    sh "cp -f $ksProperties $keystorePath/debugKeystore.properties"
     sh "cp -f $ksProperties $keystorePath/releaseKeystore.properties"
   }
 }
