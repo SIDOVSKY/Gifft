@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: "com.betomorrow.appcenter"
 
+apply from: '../build-scripts/loadProperties.gradle'
+
 android {
     compileSdkVersion buildConfig.compileSdk
     defaultConfig {
@@ -111,15 +113,4 @@ dependencies {
     implementation project(':unwrapping')
 
     lintChecks project(':lint')
-}
-
-private Properties loadProperties(String propertiesFilePath) {
-    def keystoreProperties = new Properties()
-
-    def keystorePropertiesFile = file(propertiesFilePath)
-    if (keystorePropertiesFile.exists()) {
-        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-    }
-
-    return keystoreProperties
 }
