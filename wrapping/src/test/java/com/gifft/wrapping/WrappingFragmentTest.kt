@@ -8,10 +8,13 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.gifft.gift.api.GiftRepository
 import com.gifft.gift.api.TextGift
 import com.gifft.core.api.toNavBundle
+import com.gifft.gift.api.GiftType
+import com.gifft.gift.api.TextGiftLinkBuilder
 import com.gifft.wrapping.api.WrappingNavParam
 import com.nhaarman.mockitokotlin2.argThat
 import org.junit.Assert.*
 import kotlinx.android.synthetic.main.wrapping_fragment.*
+import kotlinx.coroutines.CoroutineScope
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.isEmptyString
@@ -44,8 +47,13 @@ class WrappingFragmentTest {
             R.style.AppTheme
         ) {
             WrappingFragment(object : WrappingViewModel.Factory {
-                override fun create(navParam: WrappingNavParam) =
-                    WrappingViewModel(navParam, giftRepository)
+                override fun create(navParam: WrappingNavParam, coroutineScope: CoroutineScope) =
+                    WrappingViewModel(
+                        navParam,
+                        coroutineScope,
+                        giftRepository,
+                        Mockito.mock(TextGiftLinkBuilder::class.java)
+                    )
             })
         }
 
@@ -71,6 +79,7 @@ class WrappingFragmentTest {
                     expectedSender,
                     expectedReceiver,
                     Date(),
+                    GiftType.Created,
                     expectedGiftText
                 )
             )
@@ -80,8 +89,13 @@ class WrappingFragmentTest {
             R.style.AppTheme
         ) {
             WrappingFragment(object : WrappingViewModel.Factory {
-                override fun create(navParam: WrappingNavParam) =
-                    WrappingViewModel(navParam, giftRepository)
+                override fun create(navParam: WrappingNavParam, coroutineScope: CoroutineScope) =
+                    WrappingViewModel(
+                        navParam,
+                        coroutineScope,
+                        giftRepository,
+                        Mockito.mock(TextGiftLinkBuilder::class.java)
+                    )
             })
         }
 
@@ -100,8 +114,13 @@ class WrappingFragmentTest {
             R.style.AppTheme
         ) {
             WrappingFragment(object : WrappingViewModel.Factory {
-                override fun create(navParam: WrappingNavParam) =
-                    WrappingViewModel(navParam, giftRepository)
+                override fun create(navParam: WrappingNavParam, coroutineScope: CoroutineScope) =
+                    WrappingViewModel(
+                        navParam,
+                        coroutineScope,
+                        giftRepository,
+                        Mockito.mock(TextGiftLinkBuilder::class.java)
+                    )
             })
         }
 
@@ -121,8 +140,13 @@ class WrappingFragmentTest {
             R.style.AppTheme
         ) {
             WrappingFragment(object : WrappingViewModel.Factory {
-                override fun create(navParam: WrappingNavParam) =
-                    WrappingViewModel(navParam, giftRepository)
+                override fun create(navParam: WrappingNavParam, coroutineScope: CoroutineScope) =
+                    WrappingViewModel(
+                        navParam,
+                        coroutineScope,
+                        giftRepository,
+                        Mockito.mock(TextGiftLinkBuilder::class.java)
+                    )
             })
         }
 
@@ -145,8 +169,13 @@ class WrappingFragmentTest {
             R.style.AppTheme
         ) {
             WrappingFragment(object : WrappingViewModel.Factory {
-                override fun create(navParam: WrappingNavParam) =
-                    WrappingViewModel(navParam, giftRepository)
+                override fun create(navParam: WrappingNavParam, coroutineScope: CoroutineScope) =
+                    WrappingViewModel(
+                        navParam,
+                        coroutineScope,
+                        giftRepository,
+                        Mockito.mock(TextGiftLinkBuilder::class.java)
+                    )
             })
         }
 
@@ -164,7 +193,7 @@ class WrappingFragmentTest {
         // at least 90 percent of the view's area is displayed to the user.
         onView(withText(R.string.save)).inRoot(isDialog()).perform(clickUnconstrained)
 
-        verify(giftRepository).saveCreatedTextGift(argThat {
+        verify(giftRepository).saveTextGift(argThat {
             sender == expectedSender
                     && receiver == expectedReceiver
                     && text == expectedGiftText
@@ -182,6 +211,7 @@ class WrappingFragmentTest {
                     "Initial sender",
                     "Initial receiver",
                     Date(),
+                    GiftType.Created,
                     "Initial gift text"
                 )
             )
@@ -191,8 +221,13 @@ class WrappingFragmentTest {
             R.style.AppTheme
         ) {
             WrappingFragment(object : WrappingViewModel.Factory {
-                override fun create(navParam: WrappingNavParam) =
-                    WrappingViewModel(navParam, giftRepository)
+                override fun create(navParam: WrappingNavParam, coroutineScope: CoroutineScope) =
+                    WrappingViewModel(
+                        navParam,
+                        coroutineScope,
+                        giftRepository,
+                        Mockito.mock(TextGiftLinkBuilder::class.java)
+                    )
             })
         }
 

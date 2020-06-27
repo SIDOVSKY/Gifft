@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unwrapping_sender_hint">From</string>
+    <string name="unwrapping_receiver_hint">To</string>
+    <string name="unwrapping_to_all_gifts_button">TO ALL GIFTS</string>
+</resources>

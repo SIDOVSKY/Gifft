@@ -1,5 +1,6 @@
 package com.gifft.gift
 
+import com.gifft.gift.api.GiftType
 import io.objectbox.converter.PropertyConverter
 
 class GiftTypeEnumOrdinalConverter :

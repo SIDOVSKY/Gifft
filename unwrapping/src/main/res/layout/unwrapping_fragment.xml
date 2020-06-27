@@ -12,13 +12,14 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:hint="@string/wrapping_from_hint"
+        android:hint="@string/unwrapping_sender_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/sender"
+            android:enabled="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -31,32 +32,18 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:hint="@string/wrapping_receiver_hint"
+        android:hint="@string/unwrapping_receiver_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fromLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/receiver"
+            android:enabled="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/sent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="16dp"
-        android:gravity="center"
-        android:text="@string/wrapping_sent_label"
-        android:textColor="@color/colorAccent"
-        android:textSize="12sp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toLayout"
-        tools:visibility="visible" />
 
     <com.gifft.gift_ui.GiftLayout
         android:id="@+id/giftLayout"
@@ -68,7 +55,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toLayout"
         app:layout_constraintWidth_percent="0.6"
-        app:opened="true">
+        app:opened="false">
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -82,32 +69,45 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/giftText"
+                android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:hint="@string/wrapping_input_hint"
                 android:importantForAutofill="no"
                 android:inputType="textMultiLine|textNoSuggestions"
                 android:textColor="@android:color/white"
-                android:textColorHint="#eeeeee" />
+                android:textColorHint="#eeeeee"
+                tools:text="GIFT-CONTENT" />
 
         </com.google.android.material.textfield.TextInputLayout>
     </com.gifft.gift_ui.GiftLayout>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/confetti_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@id/giftLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toLayout"
+        app:lottie_autoPlay="false"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/confetti_cannons" />
+
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/sendButton"
+        android:id="@+id/toAllGiftsButton"
         style="@style/FabStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
-        android:text="@string/wrapping_send_button"
+        android:gravity="center"
+        android:text="@string/unwrapping_to_all_gifts_button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:visibility="visible" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <include
         android:id="@+id/progress"
         layout="@layout/progress"
         android:visibility="gone" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

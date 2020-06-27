@@ -9,6 +9,7 @@ import com.gifft.gift.api.TextGift
 import com.gifft.core.api.recycler.BindingAdapter
 import com.gifft.core.api.recycler.SequenceDiffCallback
 import com.gifft.core.api.toNavBundle
+import com.gifft.gift.api.GiftType
 import com.gifft.home.databinding.GiftListItemCreatedBinding
 import com.gifft.wrapping.api.WrappingFragmentProvider
 import dagger.Lazy
@@ -43,6 +44,7 @@ class CreatedGiftListFragment @Inject constructor(
             gift.receiver.isNotEmpty() -> gift.receiver.substring(0, 1)
             else -> "*"
         }
+        sentLabel.visibility = if (gift.type == GiftType.Sent) View.VISIBLE else View.GONE
 
         item.setOnClickListener { viewModel.openGiftClick.accept(gift) }
         deleteLayout.setOnClickListener { viewModel.deleteButtonClick.accept(gift) }

@@ -1,6 +1,7 @@
 package com.gifft.gift
 
 import com.gifft.gift.api.GiftRepository
+import com.gifft.gift.api.GiftType
 import com.gifft.gift.api.TextGift
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
@@ -16,14 +17,14 @@ internal class GiftRepositoryImpl @Inject constructor(
     private val textGiftBox = boxStore.boxFor<TextGiftEntity>()
 
     override fun allReceivedGifts(): Observable<List<TextGift>> {
-        return giftsOfType(GiftType.Received)
+        return giftsOfTypes(GiftType.Received)
     }
 
     override fun allCreatedGifts(): Observable<List<TextGift>> {
-        return giftsOfType(GiftType.Created)
+        return giftsOfTypes(GiftType.Created, GiftType.Sent)
     }
 
-    override fun saveCreatedTextGift(gift: TextGift) {
+    override fun saveTextGift(gift: TextGift) {
         val existingEntity = findGiftEntity(gift.uuid)
 
         textGiftBox.put(
@@ -34,7 +35,7 @@ internal class GiftRepositoryImpl @Inject constructor(
                 gift.date,
                 gift.sender,
                 gift.receiver,
-                GiftType.Created
+                gift.type
             )
         )
     }
@@ -58,11 +59,11 @@ internal class GiftRepositoryImpl @Inject constructor(
             .find()
             .firstOrNull()
 
-    private fun giftsOfType(type: GiftType): Observable<List<TextGift>> =
+    private fun giftsOfTypes(vararg acceptableTypes: GiftType): Observable<List<TextGift>> =
         RxQuery
             .observable(
                 textGiftBox.query {
-                    filter { it.type == type }
+                    filter { acceptableTypes.contains(it.type) }
                     orderDesc(TextGiftEntity_.date)
                 })
             .map { list ->

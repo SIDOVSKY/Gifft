@@ -1,0 +1,22 @@
+def constantName = "APP_DEEP_LINK_HOST"
+
+android {
+    buildTypes {
+        debug {
+            addConstant(owner, constantName, "gifft.page.link")
+        }
+        release {
+            addConstant(owner, constantName, "gifft.page.link")
+        }
+    }
+}
+
+def addConstant(constantName, constantValue) {
+    manifestPlaceholders += [ (constantName):constantValue]
+    buildConfigField "String", "${constantName}", "\"${constantValue}\""
+}
+
+static def addConstant(target, constantName, constantValue) {
+    target.manifestPlaceholders += [ (constantName):constantValue]
+    target.buildConfigField "String", "${constantName}", "\"${constantValue}\""
+}

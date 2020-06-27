@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+apply from: '../build-scripts/appDeepLinkHost.gradle'
+
 android {
     compileSdkVersion buildConfig.compileSdk
     defaultConfig {
@@ -50,6 +52,9 @@ dependencies {
     implementation "io.objectbox:objectbox-kotlin:${versions.objectbox}"
     implementation "io.objectbox:objectbox-rxjava:${versions.objectbox}"
     kapt "io.objectbox:objectbox-processor:${versions.objectbox}"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${versions.gplay_ktx}"
+    implementation "com.google.firebase:firebase-dynamic-links-ktx:${versions.dynamic_links}"
 
     implementation "com.google.dagger:dagger:${versions.dagger}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger}"

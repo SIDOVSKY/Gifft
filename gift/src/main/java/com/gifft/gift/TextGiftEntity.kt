@@ -1,5 +1,6 @@
 package com.gifft.gift
 
+import com.gifft.gift.api.GiftType
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id

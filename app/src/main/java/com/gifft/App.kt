@@ -4,6 +4,7 @@ import android.app.Application
 import com.gifft.di.ApiProviderAggregation
 import com.gifft.di.AppModule
 import com.gifft.di.CommonsComponent
+import com.google.firebase.FirebaseApp
 
 /**
  *  Inherits [ApiProviderAggregation] to provide dependencies to modules' components via cast:
@@ -23,5 +24,10 @@ class App : Application(),
 
     init {
         appModule.application = this
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        FirebaseApp.initializeApp(this)
     }
 }

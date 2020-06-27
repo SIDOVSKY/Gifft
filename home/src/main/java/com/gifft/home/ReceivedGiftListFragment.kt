@@ -1,16 +1,28 @@
 package com.gifft.home
 
+import android.os.Bundle
+import android.view.View
+import androidx.fragment.app.commit
+import androidx.lifecycle.Lifecycle
+import com.gifft.core.api.autoDispose
 import com.gifft.gift.api.TextGift
 import com.gifft.core.api.recycler.BindingAdapter
 import com.gifft.core.api.recycler.SequenceDiffCallback
+import com.gifft.core.api.toNavBundle
 import com.gifft.home.databinding.GiftListItemReceivedBinding
+import com.gifft.unwrapping.api.UnwrappingFragmentProvider
 import dagger.Lazy
+import io.reactivex.android.schedulers.AndroidSchedulers
 import java.text.DateFormat
 import javax.inject.Inject
 
 class ReceivedGiftListFragment @Inject constructor(
-    newViewModel: Lazy<ReceivedGiftListViewModel>
+    newViewModel: Lazy<ReceivedGiftListViewModel>,
+    private val unwrappingFragmentProvider: UnwrappingFragmentProvider
 ) : GiftListFragment(lazy { newViewModel.get() }) {
+
+    override val viewModel
+        get() = super.viewModel as ReceivedGiftListViewModel
 
     override val giftListAdapter = BindingAdapter(
         GiftListItemReceivedBinding::inflate,
@@ -34,5 +46,22 @@ class ReceivedGiftListFragment @Inject constructor(
 
         item.setOnClickListener { viewModel.openGiftClick.accept(gift) }
         deleteLayout.setOnClickListener { viewModel.deleteButtonClick.accept(gift) }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        arrayOf(
+            viewModel.openGiftCommand
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    requireParentFragment().run {
+                        parentFragmentManager.commit {
+                            replace(id, unwrappingFragmentProvider.provideClass(), it.toNavBundle())
+                            addToBackStack(null)
+                        }
+                    }
+                }
+        ).autoDispose(viewLifecycleOwner, Lifecycle.Event.ON_DESTROY)
     }
 }

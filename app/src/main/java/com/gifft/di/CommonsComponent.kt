@@ -6,6 +6,7 @@ import com.gifft.core.di.CoreCommonsModule
 import com.gifft.gift.api.di.GiftApiProvider
 import com.gifft.gift.di.GiftComponent
 import com.gifft.home.di.HomeCommonsModule
+import com.gifft.unwrapping.di.UnwrappingCommonsModule
 import com.gifft.wrapping.api.di.WrappingApiProvider
 import com.gifft.wrapping.di.WrappingCommonsModule
 import dagger.Component
@@ -38,7 +39,8 @@ interface ApiProviderAggregation :
     modules = [
         CoreCommonsModule::class,
         HomeCommonsModule::class,
-        WrappingCommonsModule::class
+        WrappingCommonsModule::class,
+        UnwrappingCommonsModule::class
     ],
     dependencies = [
         AppComponent::class,

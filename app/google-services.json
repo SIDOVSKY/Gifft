@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "442971104221",
+    "firebase_url": "https://gifft-b44b6.firebaseio.com",
+    "project_id": "gifft-b44b6",
+    "storage_bucket": "gifft-b44b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442971104221:android:a52d96774393d8509bcc34",
+        "android_client_info": {
+          "package_name": "com.gifft"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "442971104221-ri7kpt9otk8vi8g0o5ch6lq9bgof22rs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gifft",
+            "certificate_hash": "c6bc7d0c1da2485981cb786f7b77c781e7269e65"
+          }
+        },
+        {
+          "client_id": "442971104221-5p0usddq9jeubptgehlntp2i9sff77o4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2_yLEkLsSux6749tSLUWZywkXK2p0UPQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "442971104221-5p0usddq9jeubptgehlntp2i9sff77o4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

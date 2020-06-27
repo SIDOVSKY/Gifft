@@ -77,6 +77,8 @@ class GiftLayout @JvmOverloads constructor(
 
     var isInteractive: Boolean
 
+    var openedChangedListener: OpenedChangedListener? = null
+
     init {
         isSaveEnabled = true
 
@@ -392,6 +394,12 @@ class GiftLayout @JvmOverloads constructor(
             requestLayout()
             positionCap()
         }
+
+        openedChangedListener?.onOpenedChanged(opened)
+    }
+
+    interface OpenedChangedListener {
+        fun onOpenedChanged(opened: Boolean)
     }
 
     @Parcelize

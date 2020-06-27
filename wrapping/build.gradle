@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+apply from: '../build-scripts/appDeepLinkHost.gradle'
+
 android {
     compileSdkVersion buildConfig.compileSdk
     defaultConfig {
@@ -45,6 +47,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7'
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
     implementation "androidx.activity:activity-ktx:${versions.activity}"
     implementation "androidx.core:core-ktx:${versions.core_ktx}"
@@ -66,6 +69,7 @@ dependencies {
     testImplementation "org.mockito:mockito-core:${versions.mockito}"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockito_ktx}"
     testImplementation "org.robolectric:robolectric:${versions.robolectric}"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutine_tst}"
     testImplementation "androidx.test:core:${versions.androidx_test}"
     testImplementation "androidx.test.ext:junit-ktx:${versions.junit_ktx}"
     testImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"

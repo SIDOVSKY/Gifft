@@ -2,8 +2,12 @@ package com.gifft.wrapping
 
 import org.junit.Assert.*
 import com.gifft.gift.api.GiftRepository
+import com.gifft.gift.api.GiftType
 import com.gifft.gift.api.TextGift
+import com.gifft.gift.api.TextGiftLinkBuilder
 import com.gifft.wrapping.api.WrappingNavParam
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineScope
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
@@ -21,6 +25,7 @@ class WrappingViewModelTest {
     @Mock
     lateinit var giftRepository: GiftRepository
 
+    @ExperimentalCoroutinesApi
     @Test
     fun `should load existing gift from parameter`() {
         val expectedSender = "Sender"
@@ -29,11 +34,21 @@ class WrappingViewModelTest {
 
         `when`(giftRepository.findGift(Mockito.anyString()))
             .thenReturn(
-                TextGift("", expectedSender, expectedReceiver, Date(), expectedGiftContent))
+                TextGift(
+                    "",
+                    expectedSender,
+                    expectedReceiver,
+                    Date(),
+                    GiftType.Created,
+                    expectedGiftContent
+                )
+            )
 
         val wrappingViewModel = WrappingViewModel(
             WrappingNavParam("123"),
-            giftRepository
+            TestCoroutineScope(),
+            giftRepository,
+            Mockito.mock(TextGiftLinkBuilder::class.java)
         )
 
         wrappingViewModel.sender
@@ -52,6 +67,7 @@ class WrappingViewModelTest {
             .dispose()
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun `should be empty without existing gift parameter`() {
         val expectedSender = ""
@@ -60,7 +76,9 @@ class WrappingViewModelTest {
 
         val wrappingViewModel = WrappingViewModel(
             WrappingNavParam(null),
-            giftRepository
+            TestCoroutineScope(),
+            giftRepository,
+            Mockito.mock(TextGiftLinkBuilder::class.java)
         )
 
         wrappingViewModel.sender
@@ -79,21 +97,27 @@ class WrappingViewModelTest {
             .dispose()
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun `should have NoChanges exit mode right after creation`() {
         val wrappingViewModel = WrappingViewModel(
             WrappingNavParam(null),
-            giftRepository
+            TestCoroutineScope(),
+            giftRepository,
+            Mockito.mock(TextGiftLinkBuilder::class.java)
         )
 
         assertEquals(WrappingViewModel.ExitMode.NoChanges, wrappingViewModel.exitMode)
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun `should have New exit mode after sender input without gift parameter`() {
         val wrappingViewModel = WrappingViewModel(
             WrappingNavParam(null),
-            giftRepository
+            TestCoroutineScope(),
+            giftRepository,
+            Mockito.mock(TextGiftLinkBuilder::class.java)
         )
 
         wrappingViewModel.senderInput.accept("NEW SENDER")
@@ -101,11 +125,14 @@ class WrappingViewModelTest {
         assertEquals(WrappingViewModel.ExitMode.New, wrappingViewModel.exitMode)
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun `should have New exit mode after receiver input without gift parameter`() {
         val wrappingViewModel = WrappingViewModel(
             WrappingNavParam(null),
-            giftRepository
+            TestCoroutineScope(),
+            giftRepository,
+            Mockito.mock(TextGiftLinkBuilder::class.java)
         )
 
         wrappingViewModel.receiverInput.accept("NEW RECEIVER")
@@ -113,11 +140,14 @@ class WrappingViewModelTest {
         assertEquals(WrappingViewModel.ExitMode.New, wrappingViewModel.exitMode)
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun `should have New exit mode after gift content input without gift parameter`() {
         val wrappingViewModel = WrappingViewModel(
             WrappingNavParam(null),
-            giftRepository
+            TestCoroutineScope(),
+            giftRepository,
+            Mockito.mock(TextGiftLinkBuilder::class.java)
         )
 
         wrappingViewModel.giftContentInput.accept("NEW CONTENT")
@@ -125,15 +155,19 @@ class WrappingViewModelTest {
         assertEquals(WrappingViewModel.ExitMode.New, wrappingViewModel.exitMode)
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun `should have Edited exit mode after gift content input with existing gift parameter`() {
         `when`(giftRepository.findGift(Mockito.anyString()))
             .thenReturn(
-                TextGift("", "OLD SENDER", "OLD RECEIVER", Date(), "OLD CONTENT"))
+                TextGift("", "OLD SENDER", "OLD RECEIVER", Date(), GiftType.Created, "OLD CONTENT")
+            )
 
         val wrappingViewModel = WrappingViewModel(
             WrappingNavParam("123"),
-            giftRepository
+            TestCoroutineScope(),
+            giftRepository,
+            Mockito.mock(TextGiftLinkBuilder::class.java)
         )
 
         wrappingViewModel.giftContentInput.accept("NEW CONTENT")
@@ -141,15 +175,19 @@ class WrappingViewModelTest {
         assertEquals(WrappingViewModel.ExitMode.Edited, wrappingViewModel.exitMode)
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun `should have Cleaned exit mode after empty inputs with existing gift parameter`() {
         `when`(giftRepository.findGift(Mockito.anyString()))
             .thenReturn(
-                TextGift("", "OLD SENDER", "OLD RECEIVER", Date(), "OLD CONTENT"))
+                TextGift("", "OLD SENDER", "OLD RECEIVER", Date(), GiftType.Created, "OLD CONTENT")
+            )
 
         val wrappingViewModel = WrappingViewModel(
             WrappingNavParam("123"),
-            giftRepository
+            TestCoroutineScope(),
+            giftRepository,
+            Mockito.mock(TextGiftLinkBuilder::class.java)
         )
 
         wrappingViewModel.senderInput.accept("")

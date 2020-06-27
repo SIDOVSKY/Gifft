@@ -7,5 +7,6 @@ data class TextGift(
     override val sender: String,
     override val receiver: String,
     override val date: Date,
+    override val type: GiftType,
     val text: String
-) : Gift(uuid, sender, receiver, date)
+) : Gift(uuid, sender, receiver, date, type)

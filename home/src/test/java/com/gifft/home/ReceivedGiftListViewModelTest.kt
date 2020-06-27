@@ -1,6 +1,7 @@
 package com.gifft.home
 
 import com.gifft.gift.api.GiftRepository
+import com.gifft.gift.api.GiftType
 import com.gifft.gift.api.TextGift
 import io.reactivex.subjects.PublishSubject
 import org.junit.Rule
@@ -22,7 +23,7 @@ class ReceivedGiftListViewModelTest {
     @Test
     fun `should load gift list after creation`() {
         val expectedGifts = listOf(
-            TextGift("", "", "", Date(), "")
+            TextGift("", "", "", Date(), GiftType.Unknown, "")
         )
 
         val allReceivedGiftsSubject = PublishSubject.create<List<TextGift>>()

@@ -9,7 +9,7 @@ dependencies {
     compileOnly "com.android.tools.lint:lint-api:$lintVersion"
     compileOnly "com.android.tools.lint:lint-checks:$lintVersion"
 
-    testImplementation "junit:junit:4.13"
+    testImplementation "junit:junit:${versions.junit}"
     testImplementation "com.android.tools.lint:lint-tests:$lintVersion"
 }
 
