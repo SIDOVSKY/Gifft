@@ -78,8 +78,13 @@ class WrappingFragment @Inject constructor(
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { editingEnabled ->
                         sender.isEnabled = editingEnabled
+                        sender.isFocusable = editingEnabled
+
                         receiver.isEnabled = editingEnabled
+                        receiver.isFocusable = editingEnabled
+
                         giftText.isEnabled = editingEnabled
+                        giftText.isFocusable = editingEnabled
                     },
 
                 sendButton.clicks()

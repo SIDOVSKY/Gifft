@@ -19,9 +19,10 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/sender"
-            android:enabled="false"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:enabled="false" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -39,9 +40,10 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/receiver"
-            android:enabled="false"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:enabled="false" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,9 +71,10 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/giftText"
-                android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="false"
                 android:gravity="center"
                 android:importantForAutofill="no"
                 android:inputType="textMultiLine|textNoSuggestions"
