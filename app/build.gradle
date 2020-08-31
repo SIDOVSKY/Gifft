@@ -2,6 +2,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: "com.betomorrow.appcenter"
+apply plugin: 'com.google.gms.google-services'
+
+apply from: '../build-scripts/loadProperties.gradle'
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -16,11 +20,52 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        debug {
+            def keystoreProperties = loadProperties('debugKeystore.properties')
+            if (keystoreProperties.isEmpty()) {
+                logger.warn('Debug keystore not found. Some modules may not work properly in Debug builds')
+                return
+            }
+
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+
+        release {
+            def keystoreProperties = loadProperties('releaseKeystore.properties')
+            if (keystoreProperties.isEmpty()) {
+                logger.warn('Release keystore not found. Some modules may not work properly in Release builds')
+                return
+            }
+
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 
     lintOptions {
@@ -31,20 +76,43 @@ android {
     }
 }
 
+appcenter {
+    // ./gradlew appCenterUploadRelease -PAPPCENTER_API_TOKEN=...
+    // or ENV variable
+    def apiTokenParameter = project.properties.get("APPCENTER_API_TOKEN", null)
+    if (apiTokenParameter != null) {
+        apiToken = apiTokenParameter
+    }
+    ownerName = "sidovsky"
+    distributionGroups = ["Collaborators"]
+    notifyTesters = true
+    apps {
+        release {
+            appName = "Gifft"
+        }
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
     implementation "androidx.core:core-ktx:${versions.core_ktx}"
 
+    implementation "com.google.firebase:firebase-core:${versions.firebase}"
+    implementation "com.google.firebase:firebase-analytics:${versions.firebase}"
+
     implementation "com.google.dagger:dagger:${versions.dagger}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
 
     testImplementation "junit:junit:${versions.junit}"
-    androidTestImplementation "androidx.test.ext:junit:${versions.junit_android}"
+    androidTestImplementation "androidx.test.ext:junit-ktx:${versions.junit_android}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
+    androidTestImplementation "androidx.test:core-ktx:${versions.androidx_test}"
+    androidTestImplementation "com.agoda.kakao:kakao:${versions.kakao}"
 
     implementation project(':core')
+    implementation project(':gift')
     implementation project(':home')
     implementation project(':wrapping')
     implementation project(':unwrapping')

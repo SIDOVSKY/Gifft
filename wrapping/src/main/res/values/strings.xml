@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="wrapping_input_hint">GIFT TEXT</string>
+    <string name="wrapping_input_hint">Text here!</string>
+    <string name="discard_changes">Discard changes</string>
+    <string name="save_cleaned_gift">Save as empty</string>
+    <string name="save_new_gift_as_draft">Save as a draft?</string>
+    <string name="save_gift_editings">Save changes?</string>
+    <string name="gift_cleaned_message">You removed all information. Delete this gift?</string>
+    <string name="wrapping_sent_label">Sent %1$s</string>
+    <string name="wrapping_from_hint">From</string>
+    <string name="wrapping_receiver_hint">To</string>
+    <string name="wrapping_send_button">SEND</string>
 </resources>

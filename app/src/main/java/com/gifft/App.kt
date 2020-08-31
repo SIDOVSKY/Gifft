@@ -2,8 +2,9 @@ package com.gifft
 
 import android.app.Application
 import com.gifft.di.ApiProviderAggregation
-import com.gifft.di.AppCommonsModule
+import com.gifft.di.AppModule
 import com.gifft.di.CommonsComponent
+import com.google.firebase.FirebaseApp
 
 /**
  *  Inherits [ApiProviderAggregation] to provide dependencies to modules' components via cast:
@@ -15,13 +16,18 @@ import com.gifft.di.CommonsComponent
  */
 @Suppress("unused")
 class App : Application(),
-    ApiProviderAggregation by CommonsComponent.create(appCommonsModule) {
+    ApiProviderAggregation by CommonsComponent.create(appModule) {
 
     companion object {
-        private val appCommonsModule = AppCommonsModule()
+        private val appModule = AppModule()
     }
 
     init {
-        appCommonsModule.application = this
+        appModule.application = this
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        FirebaseApp.initializeApp(this)
     }
 }

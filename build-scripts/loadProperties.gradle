@@ -1,0 +1,14 @@
+Properties loadProperties(String propertiesFilePath) {
+    def keystoreProperties = new Properties()
+
+    def keystorePropertiesFile = file(propertiesFilePath)
+    if (keystorePropertiesFile.exists()) {
+        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    }
+
+    return keystoreProperties
+}
+
+ext {
+    loadProperties = this.&loadProperties
+}

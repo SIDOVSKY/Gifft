@@ -1,3 +1,5 @@
 include ':app', ':core-api', ':core', ':home', ':wrapping', ':unwrapping', ':wrapping-api', ':unwrapping-api', ':gift-ui'
 rootProject.name='Gifft'
 include ':lint'
+include ':gift'
+include ':gift-api'

@@ -1,2 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gifft.unwrapping" />
+    package="com.gifft.unwrapping">
+    <application>
+        <activity
+            android:name=".GiftLinkActivity"
+            android:theme="@style/AppTheme">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="${APP_DEEP_LINK_HOST}" android:scheme="http"/>
+                <data android:host="${APP_DEEP_LINK_HOST}" android:scheme="https"/>
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

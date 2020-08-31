@@ -1,0 +1,46 @@
+#!groovy
+pipeline {
+  agent {
+    docker {
+      image 'sidovsky/android_sdk'
+      args '-it --memory=4g --cpus="3"'
+    }
+  }
+  stages {
+    stage('PREPARE') {
+      steps {
+        sh "chmod +x gradlew"
+        loadKeystores()
+      }
+    }
+    stage('BUILD') {
+      steps {
+        sh "./gradlew clean assembleRelease"
+      }
+    }
+    stage('PUBLISH') {
+      environment {
+        APPCENTER_API_TOKEN = credentials('APPCENTER_API_TOKEN')
+      }
+      steps {
+        sh "./gradlew appCenterUploadRelease"
+      }
+    }
+  }
+  post {
+    always {
+      cleanWs()
+    }
+  }
+}
+
+def loadKeystores() {
+  def keystorePath = "./app"
+  withCredentials([
+    file(credentialsId: 'keystore', variable: 'keystore'),
+    file(credentialsId: 'keystore_properties', variable: 'ksProperties')
+  ]) {
+    sh "cp -f $keystore $keystorePath/releaseKeystore.jks"
+    sh "cp -f $ksProperties $keystorePath/releaseKeystore.properties"
+  }
+}

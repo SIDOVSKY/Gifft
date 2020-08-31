@@ -1,5 +1,6 @@
 package com.gifft.gift_ui
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -12,6 +13,7 @@ import android.util.SparseArray
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.animation.doOnEnd
 import androidx.core.graphics.withTranslation
 import androidx.core.view.children
 import kotlinx.android.parcel.Parcelize
@@ -74,6 +76,8 @@ class GiftLayout @JvmOverloads constructor(
     private val initialOpened: Boolean
 
     var isInteractive: Boolean
+
+    var openedChangedListener: OpenedChangedListener? = null
 
     init {
         isSaveEnabled = true
@@ -332,7 +336,6 @@ class GiftLayout @JvmOverloads constructor(
                 true
             }
             MotionEvent.ACTION_UP -> {
-                isOpened = capOffset > maxCapOffset / 3
                 positionCap()
                 true
             }
@@ -365,9 +368,22 @@ class GiftLayout @JvmOverloads constructor(
 
 
     private fun positionCap() {
-        // TODO add animation
-        capOffset = if (isOpened) maxCapOffset else 0
-        invalidate()
+        val shouldOpen = capOffset > maxCapOffset / 3
+
+        val newCapOffset = if (shouldOpen) maxCapOffset else 0
+
+        ValueAnimator().apply {
+            setIntValues(capOffset, newCapOffset)
+            duration = 300
+            addUpdateListener { animation ->
+                capOffset = animation.animatedValue as Int
+                invalidate()
+            }
+            start()
+            doOnEnd {
+                isOpened = shouldOpen
+            }
+        }
     }
 
     private fun onOpenedChanged(opened: Boolean) {
@@ -378,6 +394,12 @@ class GiftLayout @JvmOverloads constructor(
             requestLayout()
             positionCap()
         }
+
+        openedChangedListener?.onOpenedChanged(opened)
+    }
+
+    interface OpenedChangedListener {
+        fun onOpenedChanged(opened: Boolean)
     }
 
     @Parcelize
