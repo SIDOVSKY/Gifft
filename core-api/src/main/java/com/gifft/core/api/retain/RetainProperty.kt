@@ -53,9 +53,11 @@ private class RetainProperty<Owner, T : Any>(
     init {
         // Hook init after OnCreate instead of getValue because
         // android ViewModel access requires MainThread and an attached owner.
-        // Let getValue be thread safe.
+        // Let getValue be thread safe in most cases.
         owner.letAfter(Lifecycle.Event.ON_CREATE) {
-            retainer = ViewModelProvider(it).get()
+            if (!::retainer.isInitialized) {
+                retainer = ViewModelProvider(it).get()
+            }
         }
     }
 
@@ -64,13 +66,13 @@ private class RetainProperty<Owner, T : Any>(
 
         return if (value == null) {
             if (!::retainer.isInitialized) {
-                throw IllegalStateException("Cannot access property before $thisRef is attached")
+                retainer = ViewModelProvider(thisRef).get()
             }
 
             @Suppress("UNCHECKED_CAST")
             val retainedValue = retainer.retainedObjects[property.name]?.first as? T
-                ?: producer.invoke().also {
-                    retainer.retainedObjects[property.name] = Pair(it, { clearer?.invoke(it) })
+                ?: producer.invoke().also { retainValue ->
+                    retainer.retainedObjects[property.name] = Pair(retainValue, { clearer?.invoke(retainValue) })
                 }
 
             cached = retainedValue

@@ -3,6 +3,7 @@ package com.gifft.core.api.viewbindingholder
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.ComponentActivity
+import androidx.annotation.IdRes
 import androidx.lifecycle.Lifecycle
 import androidx.viewbinding.ViewBinding
 import com.gifft.core.api.lifecyclehooks.letAfter
@@ -10,7 +11,8 @@ import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 private class ActivityViewBindingPropertyDelegate<T : ViewBinding>(
-    private val bindView: (View) -> T
+    private val bindView: (View) -> T,
+    @IdRes private val contentViewId: Int
 ) : ReadOnlyProperty<ComponentActivity, T> {
 
     private var viewBinding: T? = null
@@ -18,13 +20,11 @@ private class ActivityViewBindingPropertyDelegate<T : ViewBinding>(
     override fun getValue(thisRef: ComponentActivity, property: KProperty<*>): T {
         viewBinding?.let { return it }
 
-        if (thisRef.lifecycle.currentState == Lifecycle.State.INITIALIZED)
-            throw IllegalStateException("Cannot access view binding before activity created")
+        val contentView = thisRef.findViewById<View>(contentViewId) as? ViewGroup
+            ?: throw IllegalStateException("Could not find a view in $thisRef")
 
-        if (thisRef.lifecycle.currentState.isAtLeast(Lifecycle.State.DESTROYED))
-            throw IllegalStateException("Cannot access view binding after activity destroy")
-
-        val contentView = thisRef.findViewById<View>(android.R.id.content) as ViewGroup
+        if (contentView.childCount == 0)
+            throw IllegalStateException("Could not find a view in $thisRef")
 
         if (contentView.childCount != 1)
             throw IllegalStateException("Unexpected activity child count")
@@ -56,6 +56,7 @@ private class ActivityViewBindingPropertyDelegate<T : ViewBinding>(
  */
 @Suppress("unused")
 fun <T : ViewBinding> ComponentActivity.viewBind(
-    bindView: (View) -> T
+    bindView: (View) -> T,
+    @IdRes contentViewId: Int = android.R.id.content
 ): ReadOnlyProperty<ComponentActivity, T> =
-    ActivityViewBindingPropertyDelegate(bindView)
+    ActivityViewBindingPropertyDelegate(bindView, contentViewId)
