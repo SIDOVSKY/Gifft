@@ -1,8 +1,8 @@
-![Gifft](/art/banner.png)
+[![Gifft](art/banner.png)](#)
 
 # Gifft 🎁
 
-[![PLATFORM](https://img.shields.io/badge/platform-Android-lightgrey)]() [![API](https://img.shields.io/badge/API-21%2B-brightgreen)]()
+[![PLATFORM](https://img.shields.io/badge/platform-Android-lightgrey)](#) [![API](https://img.shields.io/badge/API-21%2B-brightgreen)](#)
 
 Gifft is a **work-in-progress** app to exchange gifts in a digital way.
 Simply enter a textual representation of your gift, sign it and share via sms, e-mail or your favorite messenger.
