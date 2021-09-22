@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -29,7 +30,8 @@ class WrappingFragment @Inject constructor(
         viewModelFactory.create(requireNavParam<WrappingNavParam>(), lifecycleScope)
     }
 
-    private val viewBinding by viewBind(WrappingFragmentBinding::bind)
+    @VisibleForTesting
+    val viewBinding by viewBind(WrappingFragmentBinding::bind)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

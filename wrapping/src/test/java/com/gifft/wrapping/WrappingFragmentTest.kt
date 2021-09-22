@@ -13,7 +13,6 @@ import com.gifft.gift.api.TextGiftLinkBuilder
 import com.gifft.wrapping.api.WrappingNavParam
 import com.nhaarman.mockitokotlin2.argThat
 import org.junit.Assert.*
-import kotlinx.android.synthetic.main.wrapping_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.Matchers.empty
@@ -58,10 +57,12 @@ class WrappingFragmentTest {
         }
 
         scenario.moveToState(Lifecycle.State.RESUMED)
-        scenario.onFragment {
-            assertThat(it.sender.text.toString(), isEmptyString())
-            assertThat(it.receiver.text.toString(), isEmptyString())
-            assertThat(it.giftText.text.toString(), isEmptyString())
+        scenario.onFragment { fragment ->
+            with(fragment.viewBinding!!) {
+                assertThat(sender.text.toString(), isEmptyString())
+                assertThat(receiver.text.toString(), isEmptyString())
+                assertThat(giftText.text.toString(), isEmptyString())
+            }
         }
     }
 
@@ -100,10 +101,12 @@ class WrappingFragmentTest {
         }
 
         scenario.moveToState(Lifecycle.State.RESUMED)
-        scenario.onFragment {
-            assertEquals(expectedSender, it.sender.text.toString())
-            assertEquals(expectedReceiver, it.receiver.text.toString())
-            assertEquals(expectedGiftText, it.giftText.text.toString())
+        scenario.onFragment { fragment ->
+            with(fragment.viewBinding!!) {
+                assertEquals(expectedSender, sender.text.toString())
+                assertEquals(expectedReceiver, receiver.text.toString())
+                assertEquals(expectedGiftText, giftText.text.toString())
+            }
         }
     }
 
@@ -125,9 +128,11 @@ class WrappingFragmentTest {
         }
 
         scenario.moveToState(Lifecycle.State.RESUMED)
-        scenario.onFragment {
-            it.giftText.setText("NEW TEXT")
-            it.requireActivity().onBackPressed()
+        scenario.onFragment { fragment ->
+            with(fragment.viewBinding!!) {
+                giftText.setText("NEW TEXT")
+            }
+            fragment.requireActivity().onBackPressed()
         }
 
         assertEquals(1, ShadowAlertDialog.getShownDialogs().size)
@@ -180,12 +185,14 @@ class WrappingFragmentTest {
         }
 
         scenario.moveToState(Lifecycle.State.RESUMED)
-        scenario.onFragment {
-            it.sender.setText(expectedSender)
-            it.receiver.setText(expectedReceiver)
-            it.giftText.setText(expectedGiftText)
+        scenario.onFragment { fragment ->
+            with(fragment.viewBinding!!) {
+                sender.setText(expectedSender)
+                receiver.setText(expectedReceiver)
+                giftText.setText(expectedGiftText)
+            }
 
-            it.requireActivity().onBackPressed()
+            fragment.requireActivity().onBackPressed()
         }
 
         // Unconstrained due to a false java.lang.RuntimeException:
@@ -232,12 +239,14 @@ class WrappingFragmentTest {
         }
 
         scenario.moveToState(Lifecycle.State.RESUMED)
-        scenario.onFragment {
-            it.sender.setText("")
-            it.receiver.setText("")
-            it.giftText.setText("")
+        scenario.onFragment { fragment ->
+            with(fragment.viewBinding!!) {
+                sender.setText("")
+                receiver.setText("")
+                giftText.setText("")
+            }
 
-            it.requireActivity().onBackPressed()
+            fragment.requireActivity().onBackPressed()
         }
 
         // Unconstrained due to a false java.lang.RuntimeException:
