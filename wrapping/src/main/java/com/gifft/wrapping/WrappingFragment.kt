@@ -1,7 +1,6 @@
 package com.gifft.wrapping
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
@@ -47,9 +46,7 @@ class WrappingFragment @Inject constructor(
             // ViewBinding import for included layout from different module is not supported yet :(
             val progressBinding = ProgressBinding.bind(root.findViewById(R.id.progress))
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                sendButton.transitionName = getString(R.string.fab_transition_name)
-            }
+            sendButton.transitionName = getString(R.string.fab_transition_name)
 
             sent.text = getString(R.string.wrapping_sent_label, viewModel.sentDate)
 

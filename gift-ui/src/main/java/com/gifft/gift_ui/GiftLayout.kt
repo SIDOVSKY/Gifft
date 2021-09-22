@@ -343,7 +343,7 @@ class GiftLayout @JvmOverloads constructor(
         }
     }
 
-    override fun onSaveInstanceState(): Parcelable? =
+    override fun onSaveInstanceState(): Parcelable =
         SavedState(super.onSaveInstanceState(), isOpened, isInteractive)
 
     override fun onRestoreInstanceState(state: Parcelable?) {

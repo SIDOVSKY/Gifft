@@ -9,9 +9,12 @@ class ViewPager2FragmentClassesAdapter(
 ) : FragmentStateAdapter(pagerHolderFragment) {
     override fun getItemCount(): Int = fragmentClasses.size
 
-    override fun createFragment(position: Int): Fragment =
-        pagerHolderFragment.childFragmentManager.fragmentFactory.instantiate(
-            pagerHolderFragment.requireContext().classLoader,
-            fragmentClasses[position].name
+    override fun createFragment(position: Int): Fragment {
+        val classs =  fragmentClasses[position]
+
+        return pagerHolderFragment.childFragmentManager.fragmentFactory.instantiate(
+            classs.classLoader ?: pagerHolderFragment.requireContext().classLoader,
+            classs.name
         )
+    }
 }

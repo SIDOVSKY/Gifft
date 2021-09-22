@@ -23,7 +23,7 @@ fun Parcelable.toNavBundle(existingBundle: Bundle = Bundle()): Bundle =
  * Nav param should be put to fragment arguments using [toNavBundle]
   */
 fun <T : Parcelable> Fragment.getNavParam(): T? =
-    arguments?.getParcelable<T>(FRAGMENT_NAV_PARAM_KEY)
+    arguments?.getParcelable(FRAGMENT_NAV_PARAM_KEY)
 
 /**
  * Nav param should be put to fragment arguments using [toNavBundle]

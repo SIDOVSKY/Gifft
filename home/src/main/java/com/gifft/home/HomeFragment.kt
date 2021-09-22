@@ -1,6 +1,5 @@
 package com.gifft.home
 
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -17,11 +16,10 @@ import com.gifft.home.databinding.HomeFragmentBinding
 import com.gifft.wrapping.api.WrappingFragmentProvider
 import com.gifft.wrapping.api.WrappingNavParam
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrategy
 import com.jakewharton.rxbinding3.view.clicks
+import dagger.Lazy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
-import dagger.Lazy
 
 class HomeFragment @Inject constructor(
     newViewModel: Lazy<HomeViewModel>,
@@ -52,15 +50,13 @@ class HomeFragment @Inject constructor(
                 )
             }
 
-            TabLayoutMediator(tabs, pager,
-                TabConfigurationStrategy { tab, position ->
-                    tab.text = when (position) {
-                        0 -> "CREATED"
-                        1 -> "RECEIVED"
-                        else -> throw IllegalStateException("Unknown tab at position $position")
-                    }
+            TabLayoutMediator(tabs, pager) { tab, position ->
+                tab.text = when (position) {
+                    0 -> "CREATED"
+                    1 -> "RECEIVED"
+                    else -> throw IllegalStateException("Unknown tab at position $position")
                 }
-            ).attach()
+            }.attach()
 
             arrayOf(
                 wrapButton.clicks()
@@ -73,10 +69,8 @@ class HomeFragment @Inject constructor(
                             enterTransition = Fade().addTarget(wrapButton)
                             exitTransition = Fade().addTarget(wrapButton)
 
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                wrapButton.transitionName = getString(R.string.fab_transition_name)
-                                addSharedElement(wrapButton, wrapButton.transitionName)
-                            }
+                            wrapButton.transitionName = getString(R.string.fab_transition_name)
+                            addSharedElement(wrapButton, wrapButton.transitionName)
 
                             val wrappingFragment = fragmentFactory.instantiate(
                                 requireContext().classLoader,

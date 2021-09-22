@@ -23,13 +23,13 @@ class SequenceDiffCallback<T>(
 ) : DiffUtil.ItemCallback<T>() {
 
     override fun areItemsTheSame(oldItem: T, newItem: T) =
-        sequenceEquals<Any>(
+        sequenceEquals(
             sequence { identityYields(oldItem) },
             sequence { identityYields(newItem) }
         )
 
     override fun areContentsTheSame(oldItem: T, newItem: T) =
-        sequenceEquals<Any>(
+        sequenceEquals(
             sequence { contentYields(oldItem) },
             sequence { contentYields(newItem) }
         )

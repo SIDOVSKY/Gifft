@@ -4,7 +4,6 @@ import android.net.Uri
 import com.gifft.gift.api.GiftType
 import com.gifft.gift.api.TextGift
 import com.gifft.gift.api.TextGiftLinkBuilder
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
