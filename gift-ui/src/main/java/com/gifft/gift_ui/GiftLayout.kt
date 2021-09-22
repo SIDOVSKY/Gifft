@@ -16,7 +16,7 @@ import android.view.ViewGroup
 import androidx.core.animation.doOnEnd
 import androidx.core.graphics.withTranslation
 import androidx.core.view.children
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import kotlin.math.max
 import kotlin.properties.Delegates
 

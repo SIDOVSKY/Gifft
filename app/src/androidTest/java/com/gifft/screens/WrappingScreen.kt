@@ -1,8 +1,8 @@
 package com.gifft.screens
 
-import com.agoda.kakao.dialog.KAlertDialog
-import com.agoda.kakao.edit.KEditText
-import com.agoda.kakao.screen.Screen
+import io.github.kakaocup.kakao.dialog.KAlertDialog
+import io.github.kakaocup.kakao.edit.KEditText
+import io.github.kakaocup.kakao.screen.Screen
 import com.gifft.R
 
 class WrappingScreen : Screen<WrappingScreen>() {

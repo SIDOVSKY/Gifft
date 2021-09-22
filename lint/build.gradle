@@ -1,8 +1,10 @@
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
+plugins {
+    id 'java-library'
+    id 'kotlin'
+}
 
 dependencies {
-    def lintVersion = '26.6.3'
+    def lintVersion = '30.0.2'
 
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
 

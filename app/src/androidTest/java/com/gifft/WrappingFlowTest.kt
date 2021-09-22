@@ -3,10 +3,10 @@ package com.gifft
 import androidx.test.espresso.action.ViewActions
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.agoda.kakao.screen.Screen.Companion.onScreen
 import com.gifft.home.HomeActivity
 import com.gifft.screens.HomeScreen
 import com.gifft.screens.WrappingScreen
+import io.github.kakaocup.kakao.screen.Screen.Companion.onScreen
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

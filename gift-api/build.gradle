@@ -1,14 +1,13 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
 
 android {
     compileSdkVersion buildConfig.compileSdk
     defaultConfig {
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
-        versionCode buildConfig.version.code
-        versionName buildConfig.version.name
 
         consumerProguardFiles 'consumer-rules.pro'
     }
