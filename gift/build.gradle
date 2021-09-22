@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'io.objectbox'
 }
 
 apply from: '../build-scripts/appDeepLinkHost.gradle'
@@ -47,10 +48,7 @@ dependencies {
 
     implementation "io.reactivex.rxjava2:rxjava:${versions.rxjava2}"
     implementation "io.reactivex.rxjava2:rxkotlin:${versions.rxkotlin2}"
-    implementation "io.objectbox:objectbox-android:${versions.objectbox}"
-    implementation "io.objectbox:objectbox-kotlin:${versions.objectbox}"
     implementation "io.objectbox:objectbox-rxjava:${versions.objectbox}"
-    kapt "io.objectbox:objectbox-processor:${versions.objectbox}"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${versions.gplay_ktx}"
     implementation "com.google.firebase:firebase-dynamic-links-ktx:${versions.dynamic_links}"
@@ -62,10 +60,6 @@ dependencies {
     testImplementation "org.robolectric:robolectric:${versions.robolectric}"
     testImplementation "androidx.test:core:${versions.androidx_test}"
     testImplementation "androidx.test.ext:junit-ktx:${versions.junit_ktx}"
-
-    testImplementation "io.objectbox:objectbox-linux:${versions.objectbox}"
-    testImplementation "io.objectbox:objectbox-macos:${versions.objectbox}"
-    testImplementation "io.objectbox:objectbox-windows:${versions.objectbox}"
 
     androidTestImplementation "androidx.test.ext:junit:${versions.junit_android}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
