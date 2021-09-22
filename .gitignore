@@ -5,6 +5,11 @@
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
+/.idea/compiler.xml
+/.idea/tasks.xml
+/.idea/gradle.xml
+/.idea/jarRepositories.xml
+/.idea/deploymentTargetDropDown.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
