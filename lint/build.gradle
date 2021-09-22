@@ -6,8 +6,6 @@ plugins {
 dependencies {
     def lintVersion = '30.0.2'
 
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
-
     compileOnly "com.android.tools.lint:lint-api:$lintVersion"
     compileOnly "com.android.tools.lint:lint-checks:$lintVersion"
 
