@@ -8,8 +8,9 @@ import com.gifft.gift.api.TextGift
 import com.gifft.gift.api.TextGiftLinkBuilder
 import com.gifft.unwrapping.api.UnwrappingNavParam
 import com.jakewharton.rxrelay2.PublishRelay
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.reactivex.Observable
 import io.reactivex.functions.Consumer
 import io.reactivex.subjects.BehaviorSubject
@@ -22,7 +23,7 @@ class UnwrappingViewModel @AssistedInject constructor(
     private val giftRepository: GiftRepository,
     private val giftLinkBuilder: TextGiftLinkBuilder
 ) {
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(navParam: UnwrappingNavParam): UnwrappingViewModel
     }

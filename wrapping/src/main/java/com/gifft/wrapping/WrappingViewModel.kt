@@ -8,8 +8,9 @@ import com.gifft.gift.api.TextGiftLinkBuilder
 import com.gifft.wrapping.api.WrappingNavParam
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.reactivex.Observable
 import io.reactivex.functions.Consumer
 import io.reactivex.subjects.BehaviorSubject
@@ -26,7 +27,7 @@ class WrappingViewModel @AssistedInject constructor(
     private val giftRepository: GiftRepository,
     private val giftLinkBuilder: TextGiftLinkBuilder
 ) : CoroutineScope by coroutineScope {
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(navParam: WrappingNavParam, coroutineScope: CoroutineScope): WrappingViewModel
     }

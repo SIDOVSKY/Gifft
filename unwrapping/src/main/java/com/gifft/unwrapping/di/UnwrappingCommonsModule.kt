@@ -5,13 +5,11 @@ import com.gifft.core.api.di.FragmentKey
 import com.gifft.unwrapping.UnwrappingFragment
 import com.gifft.unwrapping.UnwrappingFragmentProviderImpl
 import com.gifft.unwrapping.api.UnwrappingFragmentProvider
-import com.squareup.inject.assisted.dagger2.AssistedModule
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 
-@AssistedModule
-@Module(includes = [AssistedInject_UnwrappingCommonsModule::class])
+@Module
 abstract class UnwrappingCommonsModule {
     @Binds
     @IntoMap

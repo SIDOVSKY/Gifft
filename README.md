@@ -28,7 +28,7 @@ Multimodule Navigation is provided via dagger multibindings and a special all-kn
  * Kotlin Coroutines
  * AndroidX
  * Material Components
- * Dagger2 + AssistedInject
+ * Dagger2
  * RxJava 2
  * ObjectBox
  * Firebase Dynamic Links

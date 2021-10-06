@@ -5,13 +5,11 @@ import com.gifft.core.api.di.FragmentKey
 import com.gifft.wrapping.WrappingFragment
 import com.gifft.wrapping.WrappingFragmentProviderImpl
 import com.gifft.wrapping.api.WrappingFragmentProvider
-import com.squareup.inject.assisted.dagger2.AssistedModule
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 
-@AssistedModule
-@Module(includes = [AssistedInject_WrappingCommonsModule::class])
+@Module
 abstract class WrappingCommonsModule {
     @Binds
     @IntoMap

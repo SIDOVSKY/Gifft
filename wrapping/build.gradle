@@ -60,8 +60,6 @@ dependencies {
 
     implementation "com.google.dagger:dagger:${versions.dagger}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
-    compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:${versions.assist_inject}"
-    kapt "com.squareup.inject:assisted-inject-processor-dagger2:${versions.assist_inject}"
 
     testImplementation "junit:junit:${versions.junit}"
     testImplementation "org.mockito:mockito-core:${versions.mockito}"
