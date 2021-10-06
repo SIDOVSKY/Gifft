@@ -9,7 +9,7 @@ import dagger.Component
 @Component(
     dependencies = [
         CoreApiProvider::class,
-        WrappingApiProvider::class
+        WrappingApiProvider::class,
     ]
 )
 interface HomeComponent {

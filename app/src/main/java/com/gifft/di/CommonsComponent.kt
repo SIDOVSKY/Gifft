@@ -40,7 +40,7 @@ interface ApiProviderAggregation :
         CoreCommonsModule::class,
         HomeCommonsModule::class,
         WrappingCommonsModule::class,
-        UnwrappingCommonsModule::class
+        UnwrappingCommonsModule::class,
     ],
     dependencies = [
         AppComponent::class,
