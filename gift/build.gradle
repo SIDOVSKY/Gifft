@@ -67,6 +67,6 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:${versions.junit_android}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
 
-    api project(':core-api')
     api project(':gift-api')
+    implementation project(':core-api')
 }
