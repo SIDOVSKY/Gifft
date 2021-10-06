@@ -16,9 +16,12 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
+import org.jetbrains.kotlin.psi.psiUtil.isPublic
 import org.jetbrains.uast.UAnnotation
 import org.jetbrains.uast.UClass
+import java.util.*
 
+@Suppress("UnstableApiUsage")
 class MissingFragmentMultibindingDetector : Detector(), SourceCodeScanner {
     companion object {
         private const val FRAGMENT_KEY = "com.gifft.core.api.di.FragmentKey"
@@ -60,7 +63,7 @@ class MissingFragmentMultibindingDetector : Detector(), SourceCodeScanner {
             Severity.ERROR,
             Implementation(
                 MissingFragmentMultibindingDetector::class.java,
-                Scope.JAVA_FILE_SCOPE
+                EnumSet.of(Scope.ALL_JAVA_FILES),
             )
         )
     }
@@ -74,7 +77,8 @@ class MissingFragmentMultibindingDetector : Detector(), SourceCodeScanner {
         if (declaration.qualifiedName == FRAGMENT)
             return
 
-        if ((declaration.sourcePsi as KtClass).isAbstract())
+        val clazz = declaration.sourcePsi as KtClass
+        if (clazz.isAbstract() || clazz.isPublic)
             return
 
         val className = declaration.name

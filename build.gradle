@@ -100,6 +100,24 @@ allprojects {
     }
 }
 
+// Workaround for `android { lint { checkDependencies true ...` which is not working for now.
+// Same with `lintOptions`.
+subprojects {
+    if (it.name == "lint") return
+
+    afterEvaluate {
+        android {
+            lint {
+                abortOnError true
+                checkDependencies true
+            }
+        }
+        dependencies {
+            lintChecks project(':lint')
+        }
+    }
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

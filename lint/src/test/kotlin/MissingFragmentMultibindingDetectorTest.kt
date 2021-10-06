@@ -3,6 +3,7 @@ import com.gifft.lint.kotlin.MissingFragmentMultibindingDetector
 import org.junit.Test
 import testfiles.Custom
 
+@Suppress("UnstableApiUsage")
 class MissingFragmentMultibindingDetectorTest {
 
     @Test
