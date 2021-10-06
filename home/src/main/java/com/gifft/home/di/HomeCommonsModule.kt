@@ -10,19 +10,19 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 
 @Module
-interface HomeCommonsModule {
+abstract class HomeCommonsModule {
     @Binds
     @IntoMap
     @FragmentKey(HomeFragment::class)
-    fun HomeFragment.bindHomeFragment(): Fragment
+    internal abstract fun HomeFragment.bindHomeFragment(): Fragment
 
     @Binds
     @IntoMap
     @FragmentKey(CreatedGiftListFragment::class)
-    fun CreatedGiftListFragment.bindCreatedGiftListFragment(): Fragment
+    internal abstract fun CreatedGiftListFragment.bindCreatedGiftListFragment(): Fragment
 
     @Binds
     @IntoMap
     @FragmentKey(ReceivedGiftListFragment::class)
-    fun ReceivedGiftListFragment.bindReceivedGiftListFragment(): Fragment
+    internal abstract fun ReceivedGiftListFragment.bindReceivedGiftListFragment(): Fragment
 }

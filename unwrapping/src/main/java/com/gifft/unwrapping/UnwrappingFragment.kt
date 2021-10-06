@@ -19,7 +19,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class UnwrappingFragment @Inject constructor(
+internal class UnwrappingFragment @Inject constructor(
     viewModelFactory: UnwrappingViewModel.Factory
 ) : Fragment(R.layout.unwrapping_fragment) {
 

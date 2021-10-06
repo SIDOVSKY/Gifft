@@ -22,7 +22,7 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
-class WrappingFragment @Inject constructor(
+internal class WrappingFragment @Inject constructor(
     viewModelFactory: WrappingViewModel.Factory
 ) : Fragment(R.layout.wrapping_fragment) {
 

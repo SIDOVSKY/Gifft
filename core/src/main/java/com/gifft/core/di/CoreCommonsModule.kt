@@ -9,13 +9,13 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 
 @Module
-interface CoreCommonsModule {
+abstract class CoreCommonsModule {
 
     @Binds
-    fun MultibindingFragmentFactory.bindMultibindingFragmentFactory(): FragmentFactory
+    internal abstract fun MultibindingFragmentFactory.bindMultibindingFragmentFactory(): FragmentFactory
 
     @Binds
     @IntoMap
     @FragmentKey(UnderDevelopmentFragment::class)
-    fun UnderDevelopmentFragment.bindUnderDevelopmentFragment(): Fragment
+    internal abstract fun UnderDevelopmentFragment.bindUnderDevelopmentFragment(): Fragment
 }

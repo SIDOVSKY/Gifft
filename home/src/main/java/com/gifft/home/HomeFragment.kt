@@ -21,7 +21,7 @@ import dagger.Lazy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
-class HomeFragment @Inject constructor(
+internal class HomeFragment @Inject constructor(
     newViewModel: Lazy<HomeViewModel>,
     private val fragmentFactory: FragmentFactory,
     private val wrappingFragmentProvider: WrappingFragmentProvider

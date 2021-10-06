@@ -17,7 +17,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import java.text.DateFormat
 import javax.inject.Inject
 
-class CreatedGiftListFragment @Inject constructor(
+internal class CreatedGiftListFragment @Inject constructor(
     newViewModel: Lazy<CreatedGiftListViewModel>,
     private val wrappingFragmentProvider: WrappingFragmentProvider
 ) : GiftListFragment(lazy { newViewModel.get() }) {

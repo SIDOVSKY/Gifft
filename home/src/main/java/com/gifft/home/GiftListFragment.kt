@@ -15,7 +15,7 @@ import com.gifft.home.databinding.GiftListFragmentBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
 
-abstract class GiftListFragment(
+internal abstract class GiftListFragment(
     newViewModel: Lazy<GiftListViewModel>
 ) : Fragment(R.layout.gift_list_fragment) {
 

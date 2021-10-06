@@ -12,12 +12,12 @@ import dagger.multibindings.IntoMap
 
 @AssistedModule
 @Module(includes = [AssistedInject_WrappingCommonsModule::class])
-interface WrappingCommonsModule {
+abstract class WrappingCommonsModule {
     @Binds
     @IntoMap
     @FragmentKey(WrappingFragment::class)
-    fun WrappingFragment.bindWrappingFragment(): Fragment
+    internal abstract fun WrappingFragment.bindWrappingFragment(): Fragment
 
     @Binds
-    fun WrappingFragmentProviderImpl.bindWrappingFragmentProviderImpl(): WrappingFragmentProvider
+    internal abstract fun WrappingFragmentProviderImpl.bindWrappingFragmentProviderImpl(): WrappingFragmentProvider
 }
