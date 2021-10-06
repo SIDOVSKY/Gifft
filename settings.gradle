@@ -1,4 +1,4 @@
-include ':app', ':core-api', ':home', ':wrapping', ':unwrapping', ':wrapping-api', ':unwrapping-api', ':gift-ui'
+include ':app', ':core', ':home', ':wrapping', ':unwrapping', ':wrapping-api', ':unwrapping-api', ':gift-ui'
 rootProject.name='Gifft'
 include ':lint'
 include ':gift'
