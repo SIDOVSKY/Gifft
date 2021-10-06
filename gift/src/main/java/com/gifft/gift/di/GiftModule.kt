@@ -12,24 +12,18 @@ import dagger.Provides
 import io.objectbox.BoxStore
 import javax.inject.Singleton
 
-@Module(
-    includes = [
-        GiftModule.Declarations::class
-    ]
-)
-internal object GiftModule {
-
-    @Module
-    interface Declarations {
-        @Binds
-        fun GiftRepositoryImpl.bindGiftRepositoryImpl(): GiftRepository
-
-        @Binds
-        fun TextGiftLinkBuilderImpl.bindTextGiftCoderImpl(): TextGiftLinkBuilder
+@Module
+internal abstract class GiftModule {
+    companion object {
+        @Provides
+        @Singleton
+        fun provideBoxStore(context: Context): BoxStore =
+            MyObjectBox.builder().androidContext(context).build()
     }
 
-    @Provides
-    @Singleton
-    fun provideBoxStore(context: Context): BoxStore =
-        MyObjectBox.builder().androidContext(context).build()
+    @Binds
+    abstract fun GiftRepositoryImpl.bindGiftRepositoryImpl(): GiftRepository
+
+    @Binds
+    abstract fun TextGiftLinkBuilderImpl.bindTextGiftCoderImpl(): TextGiftLinkBuilder
 }
