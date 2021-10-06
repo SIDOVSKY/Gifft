@@ -1,5 +1,6 @@
 package com.gifft.gift.di
 
+import android.app.Application
 import com.gifft.core.api.di.AppApiProvider
 import com.gifft.gift.api.di.GiftApiProvider
 import dagger.Component
@@ -16,8 +17,8 @@ import javax.inject.Singleton
 )
 interface GiftComponent : GiftApiProvider {
     companion object {
-        fun create(appApiProvider: AppApiProvider): GiftComponent = DaggerGiftComponent.builder()
-            .appApiProvider(appApiProvider)
+        fun create(app: Application): GiftComponent = DaggerGiftComponent.builder()
+            .appApiProvider(app as AppApiProvider)
             .build()
     }
 }

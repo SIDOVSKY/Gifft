@@ -1,5 +1,6 @@
 package com.gifft.di
 
+import android.app.Application
 import com.gifft.core.api.di.AppApiProvider
 import com.gifft.core.api.di.CoreApiProvider
 import com.gifft.core.di.CoreCommonsModule
@@ -10,6 +11,7 @@ import com.gifft.unwrapping.di.UnwrappingCommonsModule
 import com.gifft.wrapping.api.di.WrappingApiProvider
 import com.gifft.wrapping.di.WrappingCommonsModule
 import dagger.Component
+import javax.inject.Singleton
 
 // In the same file for the ease of adding new modules' DI APIs
 interface ApiProviderAggregation :
@@ -34,7 +36,7 @@ interface ApiProviderAggregation :
  *  2. changes in common `AppWithDependencyFacade`
  *  when adding new module api provider will lead to rebuilding of all modules
  */
-@PerApp
+@Singleton
 @Component(
     modules = [
         CoreCommonsModule::class,
@@ -43,21 +45,18 @@ interface ApiProviderAggregation :
         UnwrappingCommonsModule::class,
     ],
     dependencies = [
-        AppComponent::class,
-        GiftComponent::class
+        AppApiProvider::class,
+        GiftApiProvider::class,
     ]
 )
 interface CommonsComponent : ApiProviderAggregation {
 
     companion object {
-        fun create(appModule: AppModule): CommonsComponent {
-            val appComponent = AppComponent.create(appModule)
-            val giftComponent = GiftComponent.create(appComponent)
-
+        fun create(app: Application): CommonsComponent {
             return DaggerCommonsComponent
                 .builder()
-                .appComponent(appComponent)
-                .giftComponent(giftComponent)
+                .appApiProvider(AppComponent.create(app))
+                .giftApiProvider(GiftComponent.create(app))
                 .build()
         }
     }
