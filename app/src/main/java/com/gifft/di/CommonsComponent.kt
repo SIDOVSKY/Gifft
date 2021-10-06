@@ -3,7 +3,7 @@ package com.gifft.di
 import android.app.Application
 import com.gifft.core.api.di.AppApiProvider
 import com.gifft.core.api.di.CoreApiProvider
-import com.gifft.core.di.CoreCommonsModule
+import com.gifft.core.api.di.CoreCommonsModule
 import com.gifft.gift.api.di.GiftApiProvider
 import com.gifft.gift.di.GiftComponent
 import com.gifft.home.di.HomeCommonsModule

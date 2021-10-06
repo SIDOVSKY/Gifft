@@ -1,11 +1,11 @@
-package com.gifft.core.di
+package com.gifft.core.api.di
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import javax.inject.Inject
 import javax.inject.Provider
 
-class MultibindingFragmentFactory @Inject constructor(
+internal class MultibindingFragmentFactory @Inject constructor(
     private val providers: Map<Class<out Fragment>, @JvmSuppressWildcards Provider<Fragment>>
 ) : FragmentFactory() {
 
