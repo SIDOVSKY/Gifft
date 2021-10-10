@@ -1,16 +1,16 @@
 package com.gifft.home
 
-import com.jakewharton.rxrelay2.PublishRelay
+import com.gifft.core.api.debounce
 import io.reactivex.Observable
-import io.reactivex.functions.Consumer
-import java.util.concurrent.TimeUnit
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor() {
-    private val _wrapClickOpenRelay = PublishRelay.create<Unit>()
+    private val _openWrappingCommand = PublishSubject.create<Unit>()
+    val openWrappingCommand: Observable<Unit> = _openWrappingCommand
 
-    val wrapButtonClick: Consumer<Unit> = _wrapClickOpenRelay
-
-    val openWrappingCommand: Observable<Unit> = _wrapClickOpenRelay
-        .throttleFirst(300, TimeUnit.MILLISECONDS)
+    fun onWrapButtonClick() {
+        if (debounce) return
+        _openWrappingCommand.onNext(Unit)
+    }
 }

@@ -1,14 +1,13 @@
 package com.gifft.home
 
 import android.annotation.SuppressLint
+import com.gifft.core.api.debounce
 import com.gifft.gift.api.GiftRepository
 import com.gifft.gift.api.TextGift
-import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 import io.reactivex.subjects.BehaviorSubject
-import java.util.concurrent.TimeUnit
+import io.reactivex.subjects.PublishSubject
 
 @SuppressLint("CheckResult")
 abstract class GiftListViewModel constructor(
@@ -19,8 +18,7 @@ abstract class GiftListViewModel constructor(
         IN_PROGRESS,
     }
 
-    protected val openGiftClickRelay = PublishRelay.create<TextGift>()
-    private val _deleteClickRelay = PublishRelay.create<TextGift>()
+    protected val openGiftEvent = PublishSubject.create<TextGift>()
 
     protected val stateMutable = BehaviorSubject.create<VisualState>()
 
@@ -29,18 +27,15 @@ abstract class GiftListViewModel constructor(
     val state: Observable<VisualState> = stateMutable
     abstract val gifts: Observable<List<TextGift>>
 
-    init {
-        _deleteClickRelay
-            .throttleFirst(300, TimeUnit.MILLISECONDS)
-            .subscribe { deleteGift(it) }
+    fun onOpenGiftClick(giftToOpen: TextGift) {
+        if (debounce) return
+        openGiftEvent.onNext(giftToOpen)
     }
 
-    val deleteButtonClick: Consumer<TextGift> = _deleteClickRelay
-    val openGiftClick: Consumer<TextGift> = openGiftClickRelay
+    fun onDeleteButtonClick(giftToDelete: TextGift) {
+        if (debounce) return
+        giftRepository.deleteGift(giftToDelete.uuid)
+    }
 
     fun dispose() = disposable.dispose()
-
-    private fun deleteGift(textGift: TextGift) {
-        giftRepository.deleteGift(textGift.uuid)
-    }
 }

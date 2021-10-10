@@ -6,7 +6,6 @@ import com.gifft.wrapping.api.WrappingNavParam
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.BehaviorSubject
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class CreatedGiftListViewModel @Inject constructor(
@@ -29,8 +28,6 @@ class CreatedGiftListViewModel @Inject constructor(
             .subscribe(_createdGifts)
     }
 
-    val openGiftCommand: Observable<WrappingNavParam> =
-        openGiftClickRelay
-            .throttleFirst(300, TimeUnit.MILLISECONDS)
-            .map { WrappingNavParam(it.uuid) }
+    val openGiftCommand: Observable<WrappingNavParam> = openGiftEvent
+        .map { WrappingNavParam(it.uuid) }
 }

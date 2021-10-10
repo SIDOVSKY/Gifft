@@ -60,7 +60,7 @@ internal class HomeFragment @Inject constructor(
 
             arrayOf(
                 wrapButton.clicks()
-                    .subscribe(viewModel.wrapButtonClick),
+                    .subscribe { viewModel.onWrapButtonClick() },
 
                 viewModel.openWrappingCommand
                     .observeOn(AndroidSchedulers.mainThread())

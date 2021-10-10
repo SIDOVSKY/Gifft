@@ -87,7 +87,7 @@ internal class WrappingFragment @Inject constructor(
                     },
 
                 sendButton.clicks()
-                    .subscribe(viewModel.sendButtonClick),
+                    .subscribe { viewModel.onSendGiftClick() },
 
                 sender.textChanges()
                     .skip(1)
@@ -153,7 +153,7 @@ internal class WrappingFragment @Inject constructor(
                         parentFragmentManager.popBackStack()
                     }
                     .setPositiveButton(getString(R.string.save)) { _, _ ->
-                        viewModel.saveButtonClick.accept(Unit)
+                        viewModel.onSaveGiftClick()
                         parentFragmentManager.popBackStack()
                     }
                     .show()
@@ -165,7 +165,7 @@ internal class WrappingFragment @Inject constructor(
                         parentFragmentManager.popBackStack()
                     }
                     .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                        viewModel.saveButtonClick.accept(Unit)
+                        viewModel.onSaveGiftClick()
                         parentFragmentManager.popBackStack()
                     }
                     .show()
@@ -174,14 +174,14 @@ internal class WrappingFragment @Inject constructor(
                 MaterialAlertDialogBuilder(requireContext())
                     .setMessage(getString(R.string.gift_cleaned_message))
                     .setNegativeButton(getString(R.string.save_cleaned_gift)) { _, _ ->
-                        viewModel.saveButtonClick.accept(Unit)
+                        viewModel.onSaveGiftClick()
                         parentFragmentManager.popBackStack()
                     }
                     .setNeutralButton(getString(R.string.discard_changes)) { _, _ ->
                         parentFragmentManager.popBackStack()
                     }
                     .setPositiveButton(getString(R.string.delete)) { _, _ ->
-                        viewModel.deleteButtonClick.accept(Unit)
+                        viewModel.onDeleteGiftClick()
                         parentFragmentManager.popBackStack()
                     }
                     .show()

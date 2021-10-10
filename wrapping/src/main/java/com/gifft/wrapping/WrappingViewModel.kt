@@ -1,13 +1,13 @@
 package com.gifft.wrapping
 
 import android.annotation.SuppressLint
+import com.gifft.core.api.debounce
 import com.gifft.gift.api.GiftRepository
 import com.gifft.gift.api.GiftType
 import com.gifft.gift.api.TextGift
 import com.gifft.gift.api.TextGiftLinkBuilder
 import com.gifft.wrapping.api.WrappingNavParam
 import com.jakewharton.rxrelay2.BehaviorRelay
-import com.jakewharton.rxrelay2.PublishRelay
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -18,7 +18,6 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 @SuppressLint("CheckResult") // applicable to class only
 class WrappingViewModel @AssistedInject constructor(
@@ -45,10 +44,6 @@ class WrappingViewModel @AssistedInject constructor(
     private val _shareGiftLinkSubject = PublishSubject.create<String>()
     private val _showErrorSubject = PublishSubject.create<String>()
 
-    private val _sendClickRelay = PublishRelay.create<Unit>()
-    private val _saveClickRelay = PublishRelay.create<Unit>()
-    private val _deleteClickRelay = PublishRelay.create<Unit>()
-
     private val _originalGift = navParam.existingGiftUuid?.let {
         giftRepository.findGift(it)
     }
@@ -57,18 +52,6 @@ class WrappingViewModel @AssistedInject constructor(
         BehaviorSubject.createDefault(_originalGift?.type == GiftType.Sent)
 
     init {
-        _sendClickRelay
-            .throttleFirst(300, TimeUnit.MILLISECONDS)
-            .subscribe { sendGift() }
-
-        _saveClickRelay
-            .throttleFirst(300, TimeUnit.MILLISECONDS)
-            .subscribe { saveGift() }
-
-        _deleteClickRelay
-            .throttleFirst(300, TimeUnit.MILLISECONDS)
-            .subscribe { deleteGift() }
-
         _originalGift?.let {
             _senderRelay.accept(it.sender)
             _receiverRelay.accept(it.receiver)
@@ -92,10 +75,6 @@ class WrappingViewModel @AssistedInject constructor(
     val receiverInput: Consumer<String> = _receiverRelay
     val giftContentInput: Consumer<String> = _giftContentRelay
 
-    val sendButtonClick: Consumer<Unit> = _sendClickRelay
-    val saveButtonClick: Consumer<Unit> = _saveClickRelay
-    val deleteButtonClick: Consumer<Unit> = _deleteClickRelay
-
     val exitMode: ExitMode
         get() {
             val newGift = _originalGift == null
@@ -117,6 +96,21 @@ class WrappingViewModel @AssistedInject constructor(
                 else -> ExitMode.NoChanges
             }
         }
+
+    fun onSendGiftClick() {
+        if (debounce) return
+        sendGift()
+    }
+
+    fun onSaveGiftClick() {
+        if (debounce) return
+        saveGift()
+    }
+
+    fun onDeleteGiftClick() {
+        if (debounce) return
+        deleteGift()
+    }
 
     private fun sendGift() {
         val gift = dumpGift().copy(type = GiftType.Sent)

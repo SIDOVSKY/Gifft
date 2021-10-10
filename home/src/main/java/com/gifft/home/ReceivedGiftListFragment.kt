@@ -44,8 +44,8 @@ internal class ReceivedGiftListFragment @Inject constructor(
             else -> "*"
         }
 
-        item.setOnClickListener { viewModel.openGiftClick.accept(gift) }
-        deleteLayout.setOnClickListener { viewModel.deleteButtonClick.accept(gift) }
+        item.setOnClickListener { viewModel.onOpenGiftClick(gift) }
+        deleteLayout.setOnClickListener { viewModel.onDeleteButtonClick(gift) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -99,7 +99,7 @@ internal class UnwrappingFragment @Inject constructor(
                     },
 
                 toAllGiftsButton.clicks()
-                    .subscribe(viewModel.toAllGiftsButtonClick)
+                    .subscribe { viewModel.onGoToAllGiftsClick() },
             ).autoDispose(viewLifecycleOwner, Lifecycle.Event.ON_DESTROY)
         }
     }

@@ -2,20 +2,18 @@ package com.gifft.unwrapping
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import com.gifft.core.api.debounce
 import com.gifft.gift.api.GiftRepository
 import com.gifft.gift.api.GiftType
 import com.gifft.gift.api.TextGift
 import com.gifft.gift.api.TextGiftLinkBuilder
 import com.gifft.unwrapping.api.UnwrappingNavParam
-import com.jakewharton.rxrelay2.PublishRelay
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.reactivex.Observable
-import io.reactivex.functions.Consumer
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-import java.util.concurrent.TimeUnit
 
 @SuppressLint("CheckResult") // applicable to class only
 class UnwrappingViewModel @AssistedInject constructor(
@@ -39,17 +37,14 @@ class UnwrappingViewModel @AssistedInject constructor(
     private val _giftContentSubject = BehaviorSubject.create<String>()
 
     private val _fatalError = PublishSubject.create<String>()
-    private val _goHomeRelay = PublishRelay.create<Unit>()
+    private val _goHomeCommand = PublishSubject.create<Unit>()
 
     val state: Observable<VisualState> = stateMutable
     val sender: Observable<String> = _senderSubject
     val receiver: Observable<String> = _receiverSubject
     val giftContent: Observable<String> = _giftContentSubject
 
-    val toAllGiftsButtonClick: Consumer<Unit> = _goHomeRelay
-
-    val goHomeCommand: Observable<Unit> = _goHomeRelay
-        .throttleFirst(300, TimeUnit.MILLISECONDS)
+    val goHomeCommand: Observable<Unit> = _goHomeCommand
     val fatalError: Observable<String> = _fatalError
 
     suspend fun init() {
@@ -83,5 +78,10 @@ class UnwrappingViewModel @AssistedInject constructor(
         _giftContentSubject.onNext(gift.text)
 
         stateMutable.onNext(VisualState.DEFAULT)
+    }
+
+    fun onGoToAllGiftsClick() {
+        if (debounce) return
+        _goHomeCommand.onNext(Unit)
     }
 }
