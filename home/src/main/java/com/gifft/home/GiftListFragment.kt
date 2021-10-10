@@ -2,6 +2,7 @@ package com.gifft.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.ListAdapter
@@ -43,31 +44,24 @@ internal abstract class GiftListFragment(
 
                 viewModel.state
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        progressBinding.root.visibility =
-                            if (it == GiftListViewModel.VisualState.IN_PROGRESS) View.VISIBLE
-                            else View.GONE
+                    .subscribe { state ->
+                        progressBinding.root.isVisible =
+                            state == GiftListViewModel.VisualState.IN_PROGRESS
                     },
 
                 Observables
                     .combineLatest(viewModel.state, viewModel.gifts) { state, gifts ->
-                        if (state == GiftListViewModel.VisualState.DEFAULT && gifts.isNotEmpty())
-                            View.VISIBLE
-                        else
-                            View.GONE
+                        state == GiftListViewModel.VisualState.DEFAULT && gifts.isNotEmpty()
                     }
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { giftList.visibility = it },
+                    .subscribe { giftList.isVisible = it },
 
                 Observables
                     .combineLatest(viewModel.state, viewModel.gifts) { state, gifts ->
-                        if (state == GiftListViewModel.VisualState.DEFAULT && gifts.isEmpty())
-                            View.VISIBLE
-                        else
-                            View.GONE
+                        state == GiftListViewModel.VisualState.DEFAULT && gifts.isEmpty()
                     }
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { emptyView.visibility = it }
+                    .subscribe { emptyView.isVisible = it }
 
             ).autoDispose(viewLifecycleOwner, Lifecycle.Event.ON_DESTROY)
         }

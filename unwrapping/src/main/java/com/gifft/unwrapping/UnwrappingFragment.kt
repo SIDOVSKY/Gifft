@@ -3,6 +3,7 @@ package com.gifft.unwrapping
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -54,10 +55,9 @@ internal class UnwrappingFragment @Inject constructor(
             arrayOf(
                 viewModel.state
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        progressBinding.root.visibility =
-                            if (it == UnwrappingViewModel.VisualState.IN_PROGRESS) View.VISIBLE
-                            else View.GONE
+                    .subscribe { state ->
+                        progressBinding.root.isVisible =
+                            state == UnwrappingViewModel.VisualState.IN_PROGRESS
                     },
 
                 viewModel.sender
@@ -74,7 +74,7 @@ internal class UnwrappingFragment @Inject constructor(
 
                 viewModel.fatalError
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {error ->
+                    .subscribe { error ->
                         AlertDialog.Builder(requireContext())
                             .setTitle("Error")
                             .setMessage(error)
@@ -92,8 +92,7 @@ internal class UnwrappingFragment @Inject constructor(
                                 startActivity(packageManager.getLaunchIntentForPackage(packageName))
                                 finish()
                             }
-                        }
-                        else {
+                        } else {
                             activity?.onBackPressed()
                         }
                     },

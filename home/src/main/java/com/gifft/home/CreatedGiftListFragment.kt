@@ -2,6 +2,7 @@ package com.gifft.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.commit
 import androidx.lifecycle.Lifecycle
 import com.gifft.core.api.autoDispose
@@ -44,7 +45,7 @@ internal class CreatedGiftListFragment @Inject constructor(
             gift.receiver.isNotEmpty() -> gift.receiver.substring(0, 1)
             else -> "*"
         }
-        sentLabel.visibility = if (gift.type == GiftType.Sent) View.VISIBLE else View.GONE
+        sentLabel.isVisible = gift.type == GiftType.Sent
 
         item.setOnClickListener { viewModel.onOpenGiftClick(gift) }
         deleteLayout.setOnClickListener { viewModel.onDeleteButtonClick(gift) }

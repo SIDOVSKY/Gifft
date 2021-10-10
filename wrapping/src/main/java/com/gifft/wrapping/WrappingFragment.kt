@@ -6,6 +6,7 @@ import android.view.View
 import androidx.activity.addCallback
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -55,22 +56,21 @@ internal class WrappingFragment @Inject constructor(
             arrayOf(
                 viewModel.state
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        progressBinding.root.visibility =
-                            if (it == WrappingViewModel.VisualState.IN_PROGRESS) View.VISIBLE
-                            else View.GONE
+                    .subscribe { state ->
+                        progressBinding.root.isVisible =
+                            state == WrappingViewModel.VisualState.IN_PROGRESS
                     },
 
                 viewModel.sendButtonVisible
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { visible ->
-                        sendButton.visibility = if (visible) View.VISIBLE else View.GONE
+                        sendButton.isVisible = visible
                     },
 
                 viewModel.sentLabelVisible
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { visible ->
-                        sent.visibility = if (visible) View.VISIBLE else View.GONE
+                        sent.isVisible = visible
                     },
 
                 viewModel.editingEnabled
