@@ -1,6 +1,5 @@
 package com.gifft.unwrapping
 
-import android.annotation.SuppressLint
 import android.net.Uri
 import com.gifft.core.api.debounce
 import com.gifft.gift.api.GiftRepository
@@ -15,7 +14,6 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
-@SuppressLint("CheckResult") // applicable to class only
 class UnwrappingViewModel @AssistedInject constructor(
     @Assisted val navParam: UnwrappingNavParam,
     private val giftRepository: GiftRepository,

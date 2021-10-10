@@ -1,6 +1,5 @@
 package com.gifft.wrapping
 
-import android.annotation.SuppressLint
 import com.gifft.core.api.debounce
 import com.gifft.gift.api.GiftRepository
 import com.gifft.gift.api.GiftType
@@ -19,7 +18,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*
 
-@SuppressLint("CheckResult") // applicable to class only
 class WrappingViewModel @AssistedInject constructor(
     @Assisted navParam: WrappingNavParam,
     @Assisted coroutineScope: CoroutineScope,
