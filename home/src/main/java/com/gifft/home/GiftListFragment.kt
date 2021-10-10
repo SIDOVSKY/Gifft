@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.ListAdapter
 import com.gifft.core.api.autoDispose
-import com.gifft.core.api.databinding.ProgressBinding
 import com.gifft.gift.api.TextGift
 import com.gifft.core.api.recycler.setAdapter
 import com.gifft.core.api.retain.retain
@@ -32,9 +31,6 @@ internal abstract class GiftListFragment(
         super.onViewCreated(view, savedInstanceState)
 
         with(viewBinding!!) {
-            // ViewBinding import for included layout from different module is not supported yet :(
-            val progressBinding = ProgressBinding.bind(root.findViewById(R.id.progress))
-
             giftList.setAdapter(giftListAdapter, viewLifecycleOwner)
 
             arrayOf(
@@ -45,7 +41,7 @@ internal abstract class GiftListFragment(
                 viewModel.state
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { state ->
-                        progressBinding.root.isVisible =
+                        progress.root.isVisible =
                             state == GiftListViewModel.VisualState.IN_PROGRESS
                     },
 

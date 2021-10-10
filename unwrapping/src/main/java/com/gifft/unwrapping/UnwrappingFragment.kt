@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.gifft.core.api.autoDispose
-import com.gifft.core.api.databinding.ProgressBinding
 import com.gifft.core.api.requireNavParam
 import com.gifft.core.api.retain.retain
 import com.gifft.core.api.viewbindingholder.viewBind
@@ -40,9 +39,6 @@ internal class UnwrappingFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         with(viewBinding!!) {
-            // ViewBinding import for included layout from different module is not supported yet :(
-            val progressBinding = ProgressBinding.bind(root.findViewById(R.id.progress))
-
             giftLayout.openedChangedListener = object : GiftLayout.OpenedChangedListener {
                 override fun onOpenedChanged(opened: Boolean) {
                     if (!giftOpened) {
@@ -56,7 +52,7 @@ internal class UnwrappingFragment @Inject constructor(
                 viewModel.state
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { state ->
-                        progressBinding.root.isVisible =
+                        progress.root.isVisible =
                             state == UnwrappingViewModel.VisualState.IN_PROGRESS
                     },
 
