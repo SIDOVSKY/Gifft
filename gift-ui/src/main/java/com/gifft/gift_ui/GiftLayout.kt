@@ -398,7 +398,7 @@ class GiftLayout @JvmOverloads constructor(
         openedChangedListener?.onOpenedChanged(opened)
     }
 
-    interface OpenedChangedListener {
+    fun interface OpenedChangedListener {
         fun onOpenedChanged(opened: Boolean)
     }
 

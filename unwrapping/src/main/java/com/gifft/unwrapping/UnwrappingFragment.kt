@@ -38,12 +38,10 @@ internal class UnwrappingFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(viewBinding!!) {
         super.onViewCreated(view, savedInstanceState)
 
-        giftLayout.openedChangedListener = object : GiftLayout.OpenedChangedListener {
-            override fun onOpenedChanged(opened: Boolean) {
-                if (!giftOpened) {
-                    giftOpened = true
-                    confettiAnimation.playAnimation()
-                }
+        giftLayout.openedChangedListener = GiftLayout.OpenedChangedListener {
+            if (!giftOpened) {
+                giftOpened = true
+                confettiAnimation.playAnimation()
             }
         }
 
