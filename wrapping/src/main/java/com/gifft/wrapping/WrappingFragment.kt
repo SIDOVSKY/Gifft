@@ -41,100 +41,98 @@ internal class WrappingFragment @Inject constructor(
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(viewBinding!!) {
         super.onViewCreated(view, savedInstanceState)
 
-        with(viewBinding!!) {
-            sendButton.transitionName = getString(R.string.fab_transition_name)
+        sendButton.transitionName = getString(R.string.fab_transition_name)
 
-            sent.text = getString(R.string.wrapping_sent_label, viewModel.sentDate)
+        sent.text = getString(R.string.wrapping_sent_label, viewModel.sentDate)
 
-            arrayOf(
-                viewModel.state
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { state ->
-                        progress.root.isVisible =
-                            state == WrappingViewModel.VisualState.IN_PROGRESS
-                    },
+        arrayOf(
+            viewModel.state
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { state ->
+                    progress.root.isVisible =
+                        state == WrappingViewModel.VisualState.IN_PROGRESS
+                },
 
-                viewModel.sendButtonVisible
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { visible ->
-                        sendButton.isVisible = visible
-                    },
+            viewModel.sendButtonVisible
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { visible ->
+                    sendButton.isVisible = visible
+                },
 
-                viewModel.sentLabelVisible
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { visible ->
-                        sent.isVisible = visible
-                    },
+            viewModel.sentLabelVisible
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { visible ->
+                    sent.isVisible = visible
+                },
 
-                viewModel.editingEnabled
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { editingEnabled ->
-                        sender.isEnabled = editingEnabled
-                        sender.isFocusable = editingEnabled
+            viewModel.editingEnabled
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { editingEnabled ->
+                    sender.isEnabled = editingEnabled
+                    sender.isFocusable = editingEnabled
 
-                        receiver.isEnabled = editingEnabled
-                        receiver.isFocusable = editingEnabled
+                    receiver.isEnabled = editingEnabled
+                    receiver.isFocusable = editingEnabled
 
-                        giftText.isEnabled = editingEnabled
-                        giftText.isFocusable = editingEnabled
-                    },
+                    giftText.isEnabled = editingEnabled
+                    giftText.isFocusable = editingEnabled
+                },
 
-                sendButton.clicks()
-                    .subscribe { viewModel.onSendGiftClick() },
+            sendButton.clicks()
+                .subscribe { viewModel.onSendGiftClick() },
 
-                sender.textChanges()
-                    .skip(1)
-                    .map { it.toString() }
-                    .subscribe(viewModel.senderInput),
+            sender.textChanges()
+                .skip(1)
+                .map { it.toString() }
+                .subscribe(viewModel.senderInput),
 
-                receiver.textChanges()
-                    .skip(1)
-                    .map { it.toString() }
-                    .subscribe(viewModel.receiverInput),
+            receiver.textChanges()
+                .skip(1)
+                .map { it.toString() }
+                .subscribe(viewModel.receiverInput),
 
-                giftText.textChanges()
-                    .skip(1)
-                    .map { it.toString() }
-                    .subscribe(viewModel.giftContentInput),
+            giftText.textChanges()
+                .skip(1)
+                .map { it.toString() }
+                .subscribe(viewModel.giftContentInput),
 
-                viewModel.shareGiftLinkCommand
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        startActivity(Intent.createChooser(Intent().apply {
-                            action = Intent.ACTION_SEND
-                            putExtra(Intent.EXTRA_TEXT, it)
-                            type = "text/plain"
-                        }, null))
-                    },
+            viewModel.shareGiftLinkCommand
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    startActivity(Intent.createChooser(Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, it)
+                        type = "text/plain"
+                    }, null))
+                },
 
-                viewModel.showErrorCommand
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        AlertDialog.Builder(requireContext())
-                            .setTitle("Error")
-                            .setMessage(it)
-                            .show()
-                    },
+            viewModel.showErrorCommand
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("Error")
+                        .setMessage(it)
+                        .show()
+                },
 
-                viewModel.sender
-                    .filter { sender.text?.toString() != it }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { sender.setText(it) },
+            viewModel.sender
+                .filter { sender.text?.toString() != it }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { sender.setText(it) },
 
-                viewModel.receiver
-                    .filter { receiver.text?.toString() != it }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { receiver.setText(it) },
+            viewModel.receiver
+                .filter { receiver.text?.toString() != it }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { receiver.setText(it) },
 
-                viewModel.giftContent
-                    .filter { giftText.text?.toString() != it }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { giftText.setText(it) }
-            ).autoDispose(viewLifecycleOwner, Lifecycle.Event.ON_DESTROY)
-        }
+            viewModel.giftContent
+                .filter { giftText.text?.toString() != it }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { giftText.setText(it) }
+        ).autoDispose(viewLifecycleOwner, Lifecycle.Event.ON_DESTROY)
     }
 
     private fun onBackPressed() {

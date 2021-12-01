@@ -36,58 +36,55 @@ internal class HomeFragment @Inject constructor(
         super.onCreate(savedInstanceState)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(viewBinding!!) {
         super.onViewCreated(view, savedInstanceState)
 
-        with(viewBinding!!) {
-
-            pager.apply {
-                isUserInputEnabled = false
-                adapter = ViewPager2FragmentClassesAdapter(
-                    this@HomeFragment,
-                    CreatedGiftListFragment::class.java,
-                    ReceivedGiftListFragment::class.java
-                )
-            }
-
-            TabLayoutMediator(tabs, pager) { tab, position ->
-                tab.text = when (position) {
-                    0 -> "CREATED"
-                    1 -> "RECEIVED"
-                    else -> throw IllegalStateException("Unknown tab at position $position")
-                }
-            }.attach()
-
-            arrayOf(
-                wrapButton.clicks()
-                    .subscribe { viewModel.onWrapButtonClick() },
-
-                viewModel.openWrappingCommand
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        parentFragmentManager.commit {
-                            enterTransition = Fade().addTarget(wrapButton)
-                            exitTransition = Fade().addTarget(wrapButton)
-
-                            wrapButton.transitionName = getString(R.string.fab_transition_name)
-                            addSharedElement(wrapButton, wrapButton.transitionName)
-
-                            val wrappingFragment = fragmentFactory.instantiate(
-                                requireContext().classLoader,
-                                wrappingFragmentProvider.provideClass().name
-                            ).apply {
-                                arguments = WrappingNavParam(null).toNavBundle()
-                                sharedElementEnterTransition = Fade().setDuration(1)
-                                sharedElementReturnTransition = Fade()
-                                enterTransition = Fade()
-                                exitTransition = Fade()
-                            }
-
-                            replace(id,  wrappingFragment)
-                            addToBackStack(null)
-                        }
-                    }
-            ).autoDispose(viewLifecycleOwner, Lifecycle.Event.ON_DESTROY)
+        pager.apply {
+            isUserInputEnabled = false
+            adapter = ViewPager2FragmentClassesAdapter(
+                this@HomeFragment,
+                CreatedGiftListFragment::class.java,
+                ReceivedGiftListFragment::class.java
+            )
         }
+
+        TabLayoutMediator(tabs, pager) { tab, position ->
+            tab.text = when (position) {
+                0 -> "CREATED"
+                1 -> "RECEIVED"
+                else -> throw IllegalStateException("Unknown tab at position $position")
+            }
+        }.attach()
+
+        arrayOf(
+            wrapButton.clicks()
+                .subscribe { viewModel.onWrapButtonClick() },
+
+            viewModel.openWrappingCommand
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    parentFragmentManager.commit {
+                        enterTransition = Fade().addTarget(wrapButton)
+                        exitTransition = Fade().addTarget(wrapButton)
+
+                        wrapButton.transitionName = getString(R.string.fab_transition_name)
+                        addSharedElement(wrapButton, wrapButton.transitionName)
+
+                        val wrappingFragment = fragmentFactory.instantiate(
+                            requireContext().classLoader,
+                            wrappingFragmentProvider.provideClass().name
+                        ).apply {
+                            arguments = WrappingNavParam(null).toNavBundle()
+                            sharedElementEnterTransition = Fade().setDuration(1)
+                            sharedElementReturnTransition = Fade()
+                            enterTransition = Fade()
+                            exitTransition = Fade()
+                        }
+
+                        replace(id, wrappingFragment)
+                        addToBackStack(null)
+                    }
+                }
+        ).autoDispose(viewLifecycleOwner, Lifecycle.Event.ON_DESTROY)
     }
 }

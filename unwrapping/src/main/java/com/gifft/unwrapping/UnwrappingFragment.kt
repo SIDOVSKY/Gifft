@@ -35,67 +35,65 @@ internal class UnwrappingFragment @Inject constructor(
 
     private val viewBinding by viewBind(UnwrappingFragmentBinding::bind)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(viewBinding!!) {
         super.onViewCreated(view, savedInstanceState)
 
-        with(viewBinding!!) {
-            giftLayout.openedChangedListener = object : GiftLayout.OpenedChangedListener {
-                override fun onOpenedChanged(opened: Boolean) {
-                    if (!giftOpened) {
-                        giftOpened = true
-                        confettiAnimation.playAnimation()
-                    }
+        giftLayout.openedChangedListener = object : GiftLayout.OpenedChangedListener {
+            override fun onOpenedChanged(opened: Boolean) {
+                if (!giftOpened) {
+                    giftOpened = true
+                    confettiAnimation.playAnimation()
                 }
             }
+        }
 
-            arrayOf(
-                viewModel.state
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { state ->
-                        progress.root.isVisible =
-                            state == UnwrappingViewModel.VisualState.IN_PROGRESS
-                    },
+        arrayOf(
+            viewModel.state
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { state ->
+                    progress.root.isVisible =
+                        state == UnwrappingViewModel.VisualState.IN_PROGRESS
+                },
 
-                viewModel.sender
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { sender.setText(it) },
+            viewModel.sender
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { sender.setText(it) },
 
-                viewModel.receiver
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { receiver.setText(it) },
+            viewModel.receiver
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { receiver.setText(it) },
 
-                viewModel.giftContent
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { giftText.setText(it) },
+            viewModel.giftContent
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { giftText.setText(it) },
 
-                viewModel.fatalError
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { error ->
-                        AlertDialog.Builder(requireContext())
-                            .setTitle("Error")
-                            .setMessage(error)
-                            .setPositiveButton("OK") { _, _ ->
-                                activity?.onBackPressed()
-                            }
-                            .show()
-                    },
-
-                viewModel.goHomeCommand
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        if (activity is GiftLinkActivity) {
-                            activity?.run {
-                                startActivity(packageManager.getLaunchIntentForPackage(packageName))
-                                finish()
-                            }
-                        } else {
+            viewModel.fatalError
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { error ->
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("Error")
+                        .setMessage(error)
+                        .setPositiveButton("OK") { _, _ ->
                             activity?.onBackPressed()
                         }
-                    },
+                        .show()
+                },
 
-                toAllGiftsButton.clicks()
-                    .subscribe { viewModel.onGoToAllGiftsClick() },
-            ).autoDispose(viewLifecycleOwner, Lifecycle.Event.ON_DESTROY)
-        }
+            viewModel.goHomeCommand
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    if (activity is GiftLinkActivity) {
+                        activity?.run {
+                            startActivity(packageManager.getLaunchIntentForPackage(packageName))
+                            finish()
+                        }
+                    } else {
+                        activity?.onBackPressed()
+                    }
+                },
+
+            toAllGiftsButton.clicks()
+                .subscribe { viewModel.onGoToAllGiftsClick() },
+        ).autoDispose(viewLifecycleOwner, Lifecycle.Event.ON_DESTROY)
     }
 }

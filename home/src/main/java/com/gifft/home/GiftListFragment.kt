@@ -27,39 +27,37 @@ internal abstract class GiftListFragment(
 
     private val viewBinding by viewBind(GiftListFragmentBinding::bind)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(viewBinding!!) {
         super.onViewCreated(view, savedInstanceState)
 
-        with(viewBinding!!) {
-            giftList.setAdapter(giftListAdapter, viewLifecycleOwner)
+        giftList.setAdapter(giftListAdapter, viewLifecycleOwner)
 
-            arrayOf(
-                viewModel.gifts
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { giftListAdapter.submitList(it) },
+        arrayOf(
+            viewModel.gifts
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { giftListAdapter.submitList(it) },
 
-                viewModel.state
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { state ->
-                        progress.root.isVisible =
-                            state == GiftListViewModel.VisualState.IN_PROGRESS
-                    },
+            viewModel.state
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { state ->
+                    progress.root.isVisible =
+                        state == GiftListViewModel.VisualState.IN_PROGRESS
+                },
 
-                Observables
-                    .combineLatest(viewModel.state, viewModel.gifts) { state, gifts ->
-                        state == GiftListViewModel.VisualState.DEFAULT && gifts.isNotEmpty()
-                    }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { giftList.isVisible = it },
+            Observables
+                .combineLatest(viewModel.state, viewModel.gifts) { state, gifts ->
+                    state == GiftListViewModel.VisualState.DEFAULT && gifts.isNotEmpty()
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { giftList.isVisible = it },
 
-                Observables
-                    .combineLatest(viewModel.state, viewModel.gifts) { state, gifts ->
-                        state == GiftListViewModel.VisualState.DEFAULT && gifts.isEmpty()
-                    }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { emptyView.isVisible = it }
+            Observables
+                .combineLatest(viewModel.state, viewModel.gifts) { state, gifts ->
+                    state == GiftListViewModel.VisualState.DEFAULT && gifts.isEmpty()
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { emptyView.isVisible = it }
 
-            ).autoDispose(viewLifecycleOwner, Lifecycle.Event.ON_DESTROY)
-        }
+        ).autoDispose(viewLifecycleOwner, Lifecycle.Event.ON_DESTROY)
     }
 }
