@@ -8,7 +8,7 @@ object Project {
 
         kt(
             """
-            package com.gifft.core.api.di
+            package com.gifft.core.di
             
             import androidx.fragment.app.Fragment
             

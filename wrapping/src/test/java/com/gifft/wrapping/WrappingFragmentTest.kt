@@ -7,7 +7,7 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.gifft.gift.api.GiftRepository
 import com.gifft.gift.api.TextGift
-import com.gifft.core.api.toNavBundle
+import com.gifft.core.toNavBundle
 import com.gifft.gift.api.GiftType
 import com.gifft.gift.api.TextGiftLinkBuilder
 import com.gifft.wrapping.api.WrappingNavParam

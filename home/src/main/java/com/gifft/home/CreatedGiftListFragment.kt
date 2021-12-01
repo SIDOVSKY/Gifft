@@ -5,11 +5,11 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.commit
 import androidx.lifecycle.Lifecycle
-import com.gifft.core.api.autoDispose
+import com.gifft.core.autoDispose
 import com.gifft.gift.api.TextGift
-import com.gifft.core.api.recycler.BindingAdapter
-import com.gifft.core.api.recycler.SequenceDiffCallback
-import com.gifft.core.api.toNavBundle
+import com.gifft.core.recycler.BindingAdapter
+import com.gifft.core.recycler.SequenceDiffCallback
+import com.gifft.core.toNavBundle
 import com.gifft.gift.api.GiftType
 import com.gifft.home.databinding.GiftListItemCreatedBinding
 import com.gifft.wrapping.api.WrappingFragmentProvider

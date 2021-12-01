@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
-import com.gifft.core.api.toNavBundle
+import com.gifft.core.toNavBundle
 import com.gifft.unwrapping.api.UnwrappingNavParam
 import com.gifft.unwrapping.di.GiftLinkComponent
 import javax.inject.Inject

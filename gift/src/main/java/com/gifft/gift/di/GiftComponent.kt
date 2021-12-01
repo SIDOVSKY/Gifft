@@ -1,7 +1,7 @@
 package com.gifft.gift.di
 
 import android.app.Application
-import com.gifft.core.api.di.AppApiProvider
+import com.gifft.core.di.AppApiProvider
 import com.gifft.gift.api.di.GiftApiProvider
 import dagger.Component
 import javax.inject.Singleton

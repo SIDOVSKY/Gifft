@@ -1,6 +1,6 @@
 package com.gifft.wrapping
 
-import com.gifft.core.api.debounce
+import com.gifft.core.debounce
 import com.gifft.gift.api.GiftRepository
 import com.gifft.gift.api.GiftType
 import com.gifft.gift.api.TextGift

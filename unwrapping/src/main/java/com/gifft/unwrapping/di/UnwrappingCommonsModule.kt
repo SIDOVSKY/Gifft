@@ -1,7 +1,7 @@
 package com.gifft.unwrapping.di
 
 import androidx.fragment.app.Fragment
-import com.gifft.core.api.di.FragmentKey
+import com.gifft.core.di.FragmentKey
 import com.gifft.unwrapping.UnwrappingFragment
 import com.gifft.unwrapping.api.UnwrappingFragmentProvider
 import dagger.Binds

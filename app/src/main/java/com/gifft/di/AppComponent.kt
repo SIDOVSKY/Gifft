@@ -1,7 +1,7 @@
 package com.gifft.di
 
 import android.app.Application
-import com.gifft.core.api.di.AppApiProvider
+import com.gifft.core.di.AppApiProvider
 import dagger.Component
 import javax.inject.Singleton
 import dagger.BindsInstance

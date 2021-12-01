@@ -44,7 +44,7 @@ object Custom {
             package $PACKAGE
             
             import androidx.fragment.app.Fragment
-            import com.gifft.core.api.di.FragmentKey
+            import com.gifft.core.di.FragmentKey
             import dagger.Binds
             import dagger.Module
             import dagger.multibindings.IntoMap

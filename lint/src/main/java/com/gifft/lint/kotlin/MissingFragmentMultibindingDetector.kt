@@ -24,7 +24,7 @@ import java.util.*
 @Suppress("UnstableApiUsage")
 class MissingFragmentMultibindingDetector : Detector(), SourceCodeScanner {
     companion object {
-        private const val FRAGMENT_KEY = "com.gifft.core.api.di.FragmentKey"
+        private const val FRAGMENT_KEY = "com.gifft.core.di.FragmentKey"
         private const val FRAGMENT = "androidx.fragment.app.Fragment"
 
         private const val DESCRIPTION =

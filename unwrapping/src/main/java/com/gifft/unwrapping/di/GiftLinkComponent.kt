@@ -1,7 +1,7 @@
 package com.gifft.unwrapping.di
 
 import android.app.Application
-import com.gifft.core.api.di.CoreApiProvider
+import com.gifft.core.di.CoreApiProvider
 import com.gifft.unwrapping.GiftLinkActivity
 import dagger.Component
 

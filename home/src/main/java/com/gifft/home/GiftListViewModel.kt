@@ -1,6 +1,6 @@
 package com.gifft.home
 
-import com.gifft.core.api.debounce
+import com.gifft.core.debounce
 import com.gifft.gift.api.GiftRepository
 import com.gifft.gift.api.TextGift
 import io.reactivex.Observable

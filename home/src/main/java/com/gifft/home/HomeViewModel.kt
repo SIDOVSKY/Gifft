@@ -1,6 +1,6 @@
 package com.gifft.home
 
-import com.gifft.core.api.debounce
+import com.gifft.core.debounce
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject

@@ -7,11 +7,11 @@ import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.commit
 import androidx.lifecycle.Lifecycle
 import androidx.transition.Fade
-import com.gifft.core.api.ViewPager2FragmentClassesAdapter
-import com.gifft.core.api.autoDispose
-import com.gifft.core.api.retain.retain
-import com.gifft.core.api.toNavBundle
-import com.gifft.core.api.viewbindingholder.viewBind
+import com.gifft.core.ViewPager2FragmentClassesAdapter
+import com.gifft.core.autoDispose
+import com.gifft.core.retain.retain
+import com.gifft.core.toNavBundle
+import com.gifft.core.viewbindingholder.viewBind
 import com.gifft.home.databinding.HomeFragmentBinding
 import com.gifft.wrapping.api.WrappingFragmentProvider
 import com.gifft.wrapping.api.WrappingNavParam

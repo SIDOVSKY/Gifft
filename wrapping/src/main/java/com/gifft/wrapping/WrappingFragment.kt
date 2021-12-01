@@ -10,10 +10,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import com.gifft.core.api.autoDispose
-import com.gifft.core.api.requireNavParam
-import com.gifft.core.api.retain.retain
-import com.gifft.core.api.viewbindingholder.viewBind
+import com.gifft.core.autoDispose
+import com.gifft.core.requireNavParam
+import com.gifft.core.retain.retain
+import com.gifft.core.viewbindingholder.viewBind
 import com.gifft.wrapping.api.WrappingNavParam
 import com.gifft.wrapping.databinding.WrappingFragmentBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

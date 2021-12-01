@@ -1,7 +1,7 @@
 package com.gifft.home.di
 
 import android.app.Application
-import com.gifft.core.api.di.CoreApiProvider
+import com.gifft.core.di.CoreApiProvider
 import com.gifft.home.HomeActivity
 import com.gifft.wrapping.api.di.WrappingApiProvider
 import dagger.Component
