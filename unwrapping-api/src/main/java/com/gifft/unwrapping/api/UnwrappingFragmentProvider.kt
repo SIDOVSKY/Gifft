@@ -1,7 +1,5 @@
 package com.gifft.unwrapping.api
 
-import androidx.fragment.app.Fragment
+import com.gifft.core.api.FragmentProvider
 
-interface UnwrappingFragmentProvider {
-    fun provideClass() : Class<out Fragment>
-}
+fun interface UnwrappingFragmentProvider : FragmentProvider

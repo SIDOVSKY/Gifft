@@ -1,7 +1,5 @@
 package com.gifft.wrapping.api
 
-import androidx.fragment.app.Fragment
+import com.gifft.core.api.FragmentProvider
 
-interface WrappingFragmentProvider {
-    fun provideClass() : Class<out Fragment>
-}
+fun interface WrappingFragmentProvider : FragmentProvider

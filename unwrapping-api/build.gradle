@@ -24,4 +24,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "androidx.fragment:fragment-ktx:${versions.fragment}"
+
+    implementation project(':core')
 }
