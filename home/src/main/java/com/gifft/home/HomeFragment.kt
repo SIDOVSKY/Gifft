@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.commit
-import androidx.lifecycle.Lifecycle
 import androidx.transition.Fade
 import com.gifft.core.ViewPager2FragmentClassesAdapter
 import com.gifft.core.autoDispose
@@ -85,6 +84,6 @@ internal class HomeFragment @Inject constructor(
                         addToBackStack(null)
                     }
                 }
-        ).autoDispose(viewLifecycleOwner, Lifecycle.Event.ON_DESTROY)
+        ).autoDispose(viewLifecycleOwner)
     }
 }

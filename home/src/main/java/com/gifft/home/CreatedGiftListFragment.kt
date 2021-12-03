@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.commit
-import androidx.lifecycle.Lifecycle
 import com.gifft.core.autoDispose
 import com.gifft.gift.api.TextGift
 import com.gifft.core.recycler.BindingAdapter
@@ -65,6 +64,6 @@ internal class CreatedGiftListFragment @Inject constructor(
                         }
                     }
                 }
-        ).autoDispose(viewLifecycleOwner, Lifecycle.Event.ON_DESTROY)
+        ).autoDispose(viewLifecycleOwner)
     }
 }

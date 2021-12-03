@@ -5,7 +5,6 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.gifft.core.autoDispose
 import com.gifft.core.requireNavParam
@@ -92,6 +91,6 @@ internal class UnwrappingFragment @Inject constructor(
 
             toAllGiftsButton.clicks()
                 .subscribe { viewModel.onGoToAllGiftsClick() },
-        ).autoDispose(viewLifecycleOwner, Lifecycle.Event.ON_DESTROY)
+        ).autoDispose(viewLifecycleOwner)
     }
 }

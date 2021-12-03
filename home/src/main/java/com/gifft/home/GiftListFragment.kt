@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.ListAdapter
 import com.gifft.core.autoDispose
 import com.gifft.gift.api.TextGift
@@ -58,6 +57,6 @@ internal abstract class GiftListFragment(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { emptyView.isVisible = it }
 
-        ).autoDispose(viewLifecycleOwner, Lifecycle.Event.ON_DESTROY)
+        ).autoDispose(viewLifecycleOwner)
     }
 }
