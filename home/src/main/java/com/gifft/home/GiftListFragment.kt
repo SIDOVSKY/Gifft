@@ -5,18 +5,17 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ListAdapter
-import com.gifft.core.autoDispose
+import com.gifft.core.LifecycleAwareSubscriber
 import com.gifft.gift.api.TextGift
 import com.gifft.core.recycler.setAdapter
 import com.gifft.core.retain.retain
 import com.gifft.core.viewbindingholder.viewBind
 import com.gifft.home.databinding.GiftListFragmentBinding
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
 
 internal abstract class GiftListFragment(
     newViewModel: Lazy<GiftListViewModel>
-) : Fragment(R.layout.gift_list_fragment) {
+) : Fragment(R.layout.gift_list_fragment), LifecycleAwareSubscriber {
 
     protected open val viewModel by retain(
         producer = { newViewModel.value },
@@ -31,32 +30,14 @@ internal abstract class GiftListFragment(
 
         giftList.setAdapter(giftListAdapter, viewLifecycleOwner)
 
-        arrayOf(
-            viewModel.gifts
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { giftListAdapter.submitList(it) },
+        viewModel.gifts observe giftListAdapter::submitList
+        viewModel.state.map { it == GiftListViewModel.VisualState.IN_PROGRESS } observe progress.root::isVisible
 
-            viewModel.state
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { state ->
-                    progress.root.isVisible =
-                        state == GiftListViewModel.VisualState.IN_PROGRESS
-                },
-
-            Observables
-                .combineLatest(viewModel.state, viewModel.gifts) { state, gifts ->
-                    state == GiftListViewModel.VisualState.DEFAULT && gifts.isNotEmpty()
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { giftList.isVisible = it },
-
-            Observables
-                .combineLatest(viewModel.state, viewModel.gifts) { state, gifts ->
-                    state == GiftListViewModel.VisualState.DEFAULT && gifts.isEmpty()
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { emptyView.isVisible = it }
-
-        ).autoDispose(viewLifecycleOwner)
+        Observables.combineLatest(viewModel.state, viewModel.gifts) observe { (state, gifts) ->
+            giftList.isVisible = state == GiftListViewModel.VisualState.DEFAULT && gifts.isNotEmpty()
+        }
+        Observables.combineLatest(viewModel.state, viewModel.gifts) observe { (state, gifts) ->
+            emptyView.isVisible = state == GiftListViewModel.VisualState.DEFAULT && gifts.isEmpty()
+        }
     }
 }

@@ -5,7 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.gifft.core.autoDispose
+import com.gifft.core.LifecycleAwareSubscriber
 import com.gifft.core.requireNavParam
 import com.gifft.core.retain.retain
 import com.gifft.core.viewbindingholder.viewBind
@@ -13,13 +13,12 @@ import com.gifft.gift_ui.GiftLayout
 import com.gifft.unwrapping.api.UnwrappingNavParam
 import com.gifft.unwrapping.databinding.UnwrappingFragmentBinding
 import com.jakewharton.rxbinding3.view.clicks
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 internal class UnwrappingFragment @Inject constructor(
     viewModelFactory: UnwrappingViewModel.Factory
-) : Fragment(R.layout.unwrapping_fragment) {
+) : Fragment(R.layout.unwrapping_fragment), LifecycleAwareSubscriber {
 
     private val viewModel by retain { retainScope ->
         viewModelFactory.create(requireNavParam<UnwrappingNavParam>()).also { viewModel ->
@@ -41,53 +40,32 @@ internal class UnwrappingFragment @Inject constructor(
             }
         }
 
-        arrayOf(
-            viewModel.state
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { state ->
-                    progress.root.isVisible =
-                        state == UnwrappingViewModel.VisualState.IN_PROGRESS
-                },
+        viewModel.state.map { it == UnwrappingViewModel.VisualState.IN_PROGRESS } observe progress.root::isVisible
+        viewModel.sender observe sender::setText
+        viewModel.receiver observe receiver::setText
+        viewModel.giftContent observe giftText::setText
 
-            viewModel.sender
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { sender.setText(it) },
+        viewModel.fatalError observe { error ->
+            AlertDialog.Builder(requireContext())
+                .setTitle("Error")
+                .setMessage(error)
+                .setPositiveButton("OK") { _, _ ->
+                    activity?.onBackPressed()
+                }
+                .show()
+        }
 
-            viewModel.receiver
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { receiver.setText(it) },
+        viewModel.goHomeCommand observe {
+            if (activity is GiftLinkActivity) {
+                activity?.run {
+                    startActivity(packageManager.getLaunchIntentForPackage(packageName))
+                    finish()
+                }
+            } else {
+                activity?.onBackPressed()
+            }
+        }
 
-            viewModel.giftContent
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { giftText.setText(it) },
-
-            viewModel.fatalError
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { error ->
-                    AlertDialog.Builder(requireContext())
-                        .setTitle("Error")
-                        .setMessage(error)
-                        .setPositiveButton("OK") { _, _ ->
-                            activity?.onBackPressed()
-                        }
-                        .show()
-                },
-
-            viewModel.goHomeCommand
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    if (activity is GiftLinkActivity) {
-                        activity?.run {
-                            startActivity(packageManager.getLaunchIntentForPackage(packageName))
-                            finish()
-                        }
-                    } else {
-                        activity?.onBackPressed()
-                    }
-                },
-
-            toAllGiftsButton.clicks()
-                .subscribe { viewModel.onGoToAllGiftsClick() },
-        ).autoDispose(viewLifecycleOwner)
+        toAllGiftsButton.clicks() observe viewModel::onGoToAllGiftsClick
     }
 }

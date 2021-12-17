@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.commit
-import com.gifft.core.autoDispose
 import com.gifft.gift.api.TextGift
 import com.gifft.core.recycler.BindingAdapter
 import com.gifft.core.recycler.SequenceDiffCallback
@@ -13,7 +12,6 @@ import com.gifft.gift.api.GiftType
 import com.gifft.home.databinding.GiftListItemCreatedBinding
 import com.gifft.wrapping.api.WrappingFragmentProvider
 import dagger.Lazy
-import io.reactivex.android.schedulers.AndroidSchedulers
 import java.text.DateFormat
 import javax.inject.Inject
 
@@ -53,17 +51,12 @@ internal class CreatedGiftListFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arrayOf(
-            viewModel.openGiftCommand
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    requireParentFragment().run {
-                        parentFragmentManager.commit {
-                            replace(id, wrappingFragmentProvider.provideClass(), it.toNavBundle())
-                            addToBackStack(null)
-                        }
-                    }
-                }
-        ).autoDispose(viewLifecycleOwner)
+        viewModel.openGiftCommand observe { navParameter ->
+            val parentFragment = requireParentFragment()
+            parentFragment.parentFragmentManager.commit {
+                replace(parentFragment.id, wrappingFragmentProvider.provideClass(), navParameter.toNavBundle())
+                addToBackStack(null)
+            }
+        }
     }
 }

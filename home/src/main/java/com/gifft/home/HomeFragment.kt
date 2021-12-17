@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.commit
 import androidx.transition.Fade
+import com.gifft.core.LifecycleAwareSubscriber
 import com.gifft.core.ViewPager2FragmentClassesAdapter
-import com.gifft.core.autoDispose
 import com.gifft.core.retain.retain
 import com.gifft.core.toNavBundle
 import com.gifft.core.viewbindingholder.viewBind
@@ -17,14 +17,13 @@ import com.gifft.wrapping.api.WrappingNavParam
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jakewharton.rxbinding3.view.clicks
 import dagger.Lazy
-import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 internal class HomeFragment @Inject constructor(
     newViewModel: Lazy<HomeViewModel>,
     private val fragmentFactory: FragmentFactory,
     private val wrappingFragmentProvider: WrappingFragmentProvider
-) : Fragment(R.layout.home_fragment) {
+) : Fragment(R.layout.home_fragment), LifecycleAwareSubscriber {
 
     private val viewModel by retain { newViewModel.get() }
 
@@ -55,35 +54,30 @@ internal class HomeFragment @Inject constructor(
             }
         }.attach()
 
-        arrayOf(
-            wrapButton.clicks()
-                .subscribe { viewModel.onWrapButtonClick() },
+        wrapButton.clicks() observe viewModel::onWrapButtonClick
 
-            viewModel.openWrappingCommand
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    parentFragmentManager.commit {
-                        enterTransition = Fade().addTarget(wrapButton)
-                        exitTransition = Fade().addTarget(wrapButton)
+        viewModel.openWrappingCommand observe {
+            parentFragmentManager.commit {
+                enterTransition = Fade().addTarget(wrapButton)
+                exitTransition = Fade().addTarget(wrapButton)
 
-                        wrapButton.transitionName = getString(R.string.fab_transition_name)
-                        addSharedElement(wrapButton, wrapButton.transitionName)
+                wrapButton.transitionName = getString(R.string.fab_transition_name)
+                addSharedElement(wrapButton, wrapButton.transitionName)
 
-                        val wrappingFragment = fragmentFactory.instantiate(
-                            requireContext().classLoader,
-                            wrappingFragmentProvider.provideClass().name
-                        ).apply {
-                            arguments = WrappingNavParam(null).toNavBundle()
-                            sharedElementEnterTransition = Fade().setDuration(1)
-                            sharedElementReturnTransition = Fade()
-                            enterTransition = Fade()
-                            exitTransition = Fade()
-                        }
-
-                        replace(id, wrappingFragment)
-                        addToBackStack(null)
-                    }
+                val wrappingFragment = fragmentFactory.instantiate(
+                    requireContext().classLoader,
+                    wrappingFragmentProvider.provideClass().name
+                ).apply {
+                    arguments = WrappingNavParam(null).toNavBundle()
+                    sharedElementEnterTransition = Fade().setDuration(1)
+                    sharedElementReturnTransition = Fade()
+                    enterTransition = Fade()
+                    exitTransition = Fade()
                 }
-        ).autoDispose(viewLifecycleOwner)
+
+                replace(id, wrappingFragment)
+                addToBackStack(null)
+            }
+        }
     }
 }

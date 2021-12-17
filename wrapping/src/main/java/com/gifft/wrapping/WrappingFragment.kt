@@ -8,7 +8,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import com.gifft.core.LifecycleAwareSubscriber
 import com.gifft.core.requireNavParam
 import com.gifft.core.retain.retain
 import com.gifft.core.viewbindingholder.viewBind
@@ -17,12 +17,11 @@ import com.gifft.wrapping.databinding.WrappingFragmentBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.textChanges
-import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 internal class WrappingFragment @Inject constructor(
     viewModelFactory: WrappingViewModel.Factory
-) : Fragment(R.layout.wrapping_fragment) {
+) : Fragment(R.layout.wrapping_fragment), LifecycleAwareSubscriber {
 
     private val viewModel by retain { retainScope ->
         viewModelFactory.create(requireNavParam<WrappingNavParam>(), retainScope)
@@ -43,94 +42,45 @@ internal class WrappingFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         sendButton.transitionName = getString(R.string.fab_transition_name)
-
         sent.text = getString(R.string.wrapping_sent_label, viewModel.sentDate)
 
-        arrayOf(
-            viewModel.state
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { state ->
-                    progress.root.isVisible =
-                        state == WrappingViewModel.VisualState.IN_PROGRESS
-                },
+        viewModel.state.map { it == WrappingViewModel.VisualState.IN_PROGRESS } observe progress.root::isVisible
+        viewModel.sentLabelVisible observe sent::isVisible
+        viewModel.sendButtonVisible observe sendButton::isVisible
 
-            viewModel.sendButtonVisible
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { visible ->
-                    sendButton.isVisible = visible
-                },
+        viewModel.editingEnabled observe { enabled ->
+            sender.isFocusable = enabled
+            sender.isEnabled = enabled
+            receiver.isFocusable = enabled
+            receiver.isEnabled = enabled
+            giftText.isFocusable = enabled
+            giftText.isEnabled = enabled
+        }
 
-            viewModel.sentLabelVisible
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { visible ->
-                    sent.isVisible = visible
-                },
+        viewModel.sender.filter { it != sender.text?.toString() } observe sender::setText
+        viewModel.receiver.filter { it != receiver.text?.toString() } observe receiver::setText
+        viewModel.giftContent.filter { it != giftText.text?.toString() } observe giftText::setText
 
-            viewModel.editingEnabled
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { editingEnabled ->
-                    sender.isEnabled = editingEnabled
-                    sender.isFocusable = editingEnabled
+        sendButton.clicks() observe viewModel::onSendGiftClick
 
-                    receiver.isEnabled = editingEnabled
-                    receiver.isFocusable = editingEnabled
+        sender.textChanges().skip(1).map { it.toString() } observe viewModel.senderInput
+        receiver.textChanges().skip(1).map { it.toString() } observe viewModel.receiverInput
+        giftText.textChanges().skip(1).map { it.toString() } observe viewModel.giftContentInput
 
-                    giftText.isEnabled = editingEnabled
-                    giftText.isFocusable = editingEnabled
-                },
+        viewModel.shareGiftLinkCommand observe { link ->
+            startActivity(Intent.createChooser(Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, link)
+                type = "text/plain"
+            }, null))
+        }
 
-            sendButton.clicks()
-                .subscribe { viewModel.onSendGiftClick() },
-
-            sender.textChanges()
-                .skip(1)
-                .map { it.toString() }
-                .subscribe(viewModel.senderInput),
-
-            receiver.textChanges()
-                .skip(1)
-                .map { it.toString() }
-                .subscribe(viewModel.receiverInput),
-
-            giftText.textChanges()
-                .skip(1)
-                .map { it.toString() }
-                .subscribe(viewModel.giftContentInput),
-
-            viewModel.shareGiftLinkCommand
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    startActivity(Intent.createChooser(Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_TEXT, it)
-                        type = "text/plain"
-                    }, null))
-                },
-
-            viewModel.showErrorCommand
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    AlertDialog.Builder(requireContext())
-                        .setTitle("Error")
-                        .setMessage(it)
-                        .show()
-                },
-
-            viewModel.sender
-                .filter { sender.text?.toString() != it }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { sender.setText(it) },
-
-            viewModel.receiver
-                .filter { receiver.text?.toString() != it }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { receiver.setText(it) },
-
-            viewModel.giftContent
-                .filter { giftText.text?.toString() != it }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { giftText.setText(it) }
-        ).autoDispose(viewLifecycleOwner)
+        viewModel.showErrorCommand observe { message ->
+            AlertDialog.Builder(requireContext())
+                .setTitle("Error")
+                .setMessage(message)
+                .show()
+        }
     }
 
     private fun onBackPressed() {
