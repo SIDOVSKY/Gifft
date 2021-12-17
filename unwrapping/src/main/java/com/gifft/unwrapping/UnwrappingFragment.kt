@@ -5,7 +5,6 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.gifft.core.autoDispose
 import com.gifft.core.requireNavParam
 import com.gifft.core.retain.retain
@@ -22,11 +21,9 @@ internal class UnwrappingFragment @Inject constructor(
     viewModelFactory: UnwrappingViewModel.Factory
 ) : Fragment(R.layout.unwrapping_fragment) {
 
-    private val viewModel by retain {
-        viewModelFactory.create(requireNavParam<UnwrappingNavParam>()).also {
-            lifecycleScope.launch {
-                it.init()
-            }
+    private val viewModel by retain { retainScope ->
+        viewModelFactory.create(requireNavParam<UnwrappingNavParam>()).also { viewModel ->
+            retainScope.launch { viewModel.init() }
         }
     }
 

@@ -9,7 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.gifft.core.autoDispose
 import com.gifft.core.requireNavParam
 import com.gifft.core.retain.retain
 import com.gifft.core.viewbindingholder.viewBind
@@ -25,8 +24,8 @@ internal class WrappingFragment @Inject constructor(
     viewModelFactory: WrappingViewModel.Factory
 ) : Fragment(R.layout.wrapping_fragment) {
 
-    private val viewModel by retain {
-        viewModelFactory.create(requireNavParam<WrappingNavParam>(), lifecycleScope)
+    private val viewModel by retain { retainScope ->
+        viewModelFactory.create(requireNavParam<WrappingNavParam>(), retainScope)
     }
 
     @VisibleForTesting
