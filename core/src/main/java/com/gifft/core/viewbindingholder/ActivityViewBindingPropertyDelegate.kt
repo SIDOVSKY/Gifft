@@ -2,6 +2,7 @@ package com.gifft.core.viewbindingholder
 
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.annotation.IdRes
 import androidx.lifecycle.Lifecycle
@@ -57,6 +58,6 @@ private class ActivityViewBindingPropertyDelegate<T : ViewBinding>(
 @Suppress("unused")
 fun <T : ViewBinding> ComponentActivity.viewBind(
     bindView: (View) -> T,
-    @IdRes contentViewId: Int = android.R.id.content
+    @IdRes contentViewId: Int = Window.ID_ANDROID_CONTENT
 ): ReadOnlyProperty<ComponentActivity, T> =
     ActivityViewBindingPropertyDelegate(bindView, contentViewId)
