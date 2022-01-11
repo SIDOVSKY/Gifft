@@ -98,6 +98,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
     implementation "androidx.core:core-ktx:${versions.core_ktx}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}"
 
     implementation "com.google.firebase:firebase-core:${versions.firebase}"
     implementation "com.google.firebase:firebase-analytics:${versions.firebase}"

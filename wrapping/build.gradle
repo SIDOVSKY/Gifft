@@ -45,7 +45,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}"
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
     implementation "androidx.activity:activity-ktx:${versions.activity}"
     implementation "androidx.core:core-ktx:${versions.core_ktx}"
