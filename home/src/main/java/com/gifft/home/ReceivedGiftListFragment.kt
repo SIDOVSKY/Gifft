@@ -9,14 +9,13 @@ import com.gifft.core.recycler.SequenceDiffCallback
 import com.gifft.core.toNavBundle
 import com.gifft.home.databinding.GiftListItemReceivedBinding
 import com.gifft.unwrapping.api.UnwrappingFragmentProvider
-import dagger.Lazy
 import java.text.DateFormat
 import javax.inject.Inject
 
 internal class ReceivedGiftListFragment @Inject constructor(
-    newViewModel: Lazy<ReceivedGiftListViewModel>,
+    viewModelFactory: ReceivedGiftListViewModel.Factory,
     private val unwrappingFragmentProvider: UnwrappingFragmentProvider
-) : GiftListFragment(lazy { newViewModel.get() }) {
+) : GiftListFragment(viewModelFactory) {
 
     override val viewModel
         get() = super.viewModel as ReceivedGiftListViewModel

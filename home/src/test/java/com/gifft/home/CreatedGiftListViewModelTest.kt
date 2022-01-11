@@ -3,7 +3,15 @@ package com.gifft.home
 import com.gifft.gift.api.GiftRepository
 import com.gifft.gift.api.GiftType
 import com.gifft.gift.api.TextGift
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
@@ -11,7 +19,9 @@ import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import java.util.*
+import org.junit.Assert.*
 
+@ExperimentalCoroutinesApi
 class CreatedGiftListViewModelTest {
 
     @get:Rule
@@ -21,29 +31,41 @@ class CreatedGiftListViewModelTest {
     lateinit var giftRepository: GiftRepository
 
     @Test
-    fun `should load gift list after creation`() {
+    fun `should load gift list after creation`() = runTest {
         val expectedGifts = listOf(
             TextGift("", "", "", Date(), GiftType.Unknown, "")
         )
 
-        val allCreatedGiftsSubject = PublishSubject.create<List<TextGift>>()
+        Mockito.`when`(giftRepository.allCreatedGifts()).thenReturn(flow {
+            delay(1_000)
+            emit(expectedGifts)
+        })
 
-        Mockito.`when`(giftRepository.allCreatedGifts())
-            .thenReturn(allCreatedGiftsSubject)
+        val loadedGiftsSequence = mutableListOf<Any>()
+        val stateSequence = mutableListOf<Any>()
+        val viewModel = CreatedGiftListViewModel(viewModelScope = this, giftRepository)
+        launch {
+            viewModel.gifts.toList(loadedGiftsSequence)
+        }
+        launch {
+            viewModel.state.toList(stateSequence)
+        }
+        advanceUntilIdle()
+        coroutineContext.job.cancelChildren()
 
-        val createdGiftViewModel = CreatedGiftListViewModel(giftRepository)
-
-        val giftsSubscriber = createdGiftViewModel.gifts.test()
-        val stateSubscriber = createdGiftViewModel.state.test()
-
-        allCreatedGiftsSubject.onNext(expectedGifts)
-
-        giftsSubscriber.assertValuesOnly(expectedGifts).dispose()
-        stateSubscriber
-            .assertValuesOnly(
+        assertEquals(
+            listOf(
                 GiftListViewModel.VisualState.IN_PROGRESS,
                 GiftListViewModel.VisualState.DEFAULT
-            )
-            .dispose()
+            ),
+            stateSequence
+        )
+        assertEquals(
+            listOf(
+                emptyList(),
+                expectedGifts
+            ),
+            loadedGiftsSequence
+        )
     }
 }

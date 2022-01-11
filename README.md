@@ -26,10 +26,10 @@ Multimodule Navigation is provided via dagger multibindings and a special all-kn
 ### Libraries and tools
 
  * Kotlin Coroutines
+ * Kotlin Flows
  * AndroidX
  * Material Components
  * Dagger2
- * RxJava 2
  * ObjectBox
  * Firebase Dynamic Links
  * Lottie

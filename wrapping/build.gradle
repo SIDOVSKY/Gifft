@@ -51,11 +51,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:${versions.constraint}"
     implementation "com.google.android.material:material:${versions.material}"
 
-    implementation "io.reactivex.rxjava2:rxjava:${versions.rxjava2}"
-    implementation "io.reactivex.rxjava2:rxkotlin:${versions.rxkotlin2}"
-    implementation "io.reactivex.rxjava2:rxandroid:${versions.rxandroid2}"
-    implementation "com.jakewharton.rxrelay2:rxrelay:${versions.rxrelay2}"
-    implementation "com.jakewharton.rxbinding3:rxbinding:${versions.rxbinding3}"
+    implementation "io.github.reactivecircus.flowbinding:flowbinding-android:${versions.flowbinding}"
 
     implementation "com.google.dagger:dagger:${versions.dagger}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger}"

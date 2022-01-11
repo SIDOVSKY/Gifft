@@ -15,8 +15,8 @@ import com.gifft.home.databinding.HomeFragmentBinding
 import com.gifft.wrapping.api.WrappingFragmentProvider
 import com.gifft.wrapping.api.WrappingNavParam
 import com.google.android.material.tabs.TabLayoutMediator
-import com.jakewharton.rxbinding3.view.clicks
 import dagger.Lazy
+import reactivecircus.flowbinding.android.view.clicks
 import javax.inject.Inject
 
 internal class HomeFragment @Inject constructor(

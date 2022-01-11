@@ -51,20 +51,9 @@ class WrappingViewModelTest {
             Mockito.mock(TextGiftLinkBuilder::class.java)
         )
 
-        wrappingViewModel.sender
-            .test()
-            .assertValue(expectedSender)
-            .dispose()
-
-        wrappingViewModel.receiver
-            .test()
-            .assertValue(expectedReceiver)
-            .dispose()
-
-        wrappingViewModel.giftContent
-            .test()
-            .assertValue(expectedGiftContent)
-            .dispose()
+        assertEquals(expectedSender, wrappingViewModel.sender.value)
+        assertEquals(expectedReceiver, wrappingViewModel.receiver.value)
+        assertEquals(expectedGiftContent, wrappingViewModel.giftContent.value)
     }
 
     @ExperimentalCoroutinesApi
@@ -81,20 +70,9 @@ class WrappingViewModelTest {
             Mockito.mock(TextGiftLinkBuilder::class.java)
         )
 
-        wrappingViewModel.sender
-            .test()
-            .assertValue(expectedSender)
-            .dispose()
-
-        wrappingViewModel.receiver
-            .test()
-            .assertValue(expectedReceiver)
-            .dispose()
-
-        wrappingViewModel.giftContent
-            .test()
-            .assertValue(expectedGiftContent)
-            .dispose()
+        assertEquals(expectedSender, wrappingViewModel.sender.value)
+        assertEquals(expectedReceiver, wrappingViewModel.receiver.value)
+        assertEquals(expectedGiftContent, wrappingViewModel.giftContent.value)
     }
 
     @ExperimentalCoroutinesApi
@@ -120,7 +98,7 @@ class WrappingViewModelTest {
             Mockito.mock(TextGiftLinkBuilder::class.java)
         )
 
-        wrappingViewModel.senderInput.accept("NEW SENDER")
+        wrappingViewModel.onSenderInput("NEW SENDER")
 
         assertEquals(WrappingViewModel.ExitMode.New, wrappingViewModel.exitMode)
     }
@@ -135,7 +113,7 @@ class WrappingViewModelTest {
             Mockito.mock(TextGiftLinkBuilder::class.java)
         )
 
-        wrappingViewModel.receiverInput.accept("NEW RECEIVER")
+        wrappingViewModel.onReceiverInput("NEW RECEIVER")
 
         assertEquals(WrappingViewModel.ExitMode.New, wrappingViewModel.exitMode)
     }
@@ -150,7 +128,7 @@ class WrappingViewModelTest {
             Mockito.mock(TextGiftLinkBuilder::class.java)
         )
 
-        wrappingViewModel.giftContentInput.accept("NEW CONTENT")
+        wrappingViewModel.onGiftContentInput("NEW CONTENT")
 
         assertEquals(WrappingViewModel.ExitMode.New, wrappingViewModel.exitMode)
     }
@@ -170,7 +148,7 @@ class WrappingViewModelTest {
             Mockito.mock(TextGiftLinkBuilder::class.java)
         )
 
-        wrappingViewModel.giftContentInput.accept("NEW CONTENT")
+        wrappingViewModel.onGiftContentInput("NEW CONTENT")
 
         assertEquals(WrappingViewModel.ExitMode.Edited, wrappingViewModel.exitMode)
     }
@@ -190,9 +168,9 @@ class WrappingViewModelTest {
             Mockito.mock(TextGiftLinkBuilder::class.java)
         )
 
-        wrappingViewModel.senderInput.accept("")
-        wrappingViewModel.receiverInput.accept("")
-        wrappingViewModel.giftContentInput.accept("")
+        wrappingViewModel.onSenderInput("")
+        wrappingViewModel.onReceiverInput("")
+        wrappingViewModel.onGiftContentInput("")
 
         assertEquals(WrappingViewModel.ExitMode.Cleaned, wrappingViewModel.exitMode)
     }

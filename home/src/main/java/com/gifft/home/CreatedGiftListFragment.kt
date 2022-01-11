@@ -11,14 +11,13 @@ import com.gifft.core.toNavBundle
 import com.gifft.gift.api.GiftType
 import com.gifft.home.databinding.GiftListItemCreatedBinding
 import com.gifft.wrapping.api.WrappingFragmentProvider
-import dagger.Lazy
 import java.text.DateFormat
 import javax.inject.Inject
 
 internal class CreatedGiftListFragment @Inject constructor(
-    newViewModel: Lazy<CreatedGiftListViewModel>,
+    viewModelFactory: CreatedGiftListViewModel.Factory,
     private val wrappingFragmentProvider: WrappingFragmentProvider
-) : GiftListFragment(lazy { newViewModel.get() }) {
+) : GiftListFragment(viewModelFactory) {
 
     override val viewModel
         get() = super.viewModel as CreatedGiftListViewModel

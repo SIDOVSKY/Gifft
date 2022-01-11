@@ -11,15 +11,16 @@ import com.gifft.core.recycler.setAdapter
 import com.gifft.core.retain.retain
 import com.gifft.core.viewbindingholder.viewBind
 import com.gifft.home.databinding.GiftListFragmentBinding
-import io.reactivex.rxkotlin.Observables
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 
 internal abstract class GiftListFragment(
-    newViewModel: Lazy<GiftListViewModel>
+    newViewModel: GiftListViewModel.Factory
 ) : Fragment(R.layout.gift_list_fragment), LifecycleAwareSubscriber {
 
-    protected open val viewModel by retain(
-        producer = { newViewModel.value },
-        onClean = { dispose() })
+    protected open val viewModel by retain { retainScope ->
+        newViewModel.create(retainScope)
+    }
 
     protected abstract val giftListAdapter: ListAdapter<TextGift, *>
 
@@ -33,11 +34,12 @@ internal abstract class GiftListFragment(
         viewModel.gifts observe giftListAdapter::submitList
         viewModel.state.map { it == GiftListViewModel.VisualState.IN_PROGRESS } observe progress.root::isVisible
 
-        Observables.combineLatest(viewModel.state, viewModel.gifts) observe { (state, gifts) ->
-            giftList.isVisible = state == GiftListViewModel.VisualState.DEFAULT && gifts.isNotEmpty()
-        }
-        Observables.combineLatest(viewModel.state, viewModel.gifts) observe { (state, gifts) ->
-            emptyView.isVisible = state == GiftListViewModel.VisualState.DEFAULT && gifts.isEmpty()
-        }
+        combine(viewModel.state, viewModel.gifts) { state, gifts ->
+            state == GiftListViewModel.VisualState.DEFAULT && gifts.isNotEmpty()
+        } observe giftList::isVisible
+
+        combine(viewModel.state, viewModel.gifts) { state, gifts ->
+            state == GiftListViewModel.VisualState.DEFAULT && gifts.isEmpty()
+        } observe emptyView::isVisible
     }
 }

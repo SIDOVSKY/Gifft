@@ -1,39 +1,43 @@
 package com.gifft.home
 
+import com.gifft.core.events.BufferingEvent
 import com.gifft.core.debounce
 import com.gifft.gift.api.GiftRepository
 import com.gifft.gift.api.TextGift
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 abstract class GiftListViewModel constructor(
-    private val giftRepository: GiftRepository
-) {
+    private val viewModelScope: CoroutineScope,
+    private val giftRepository: GiftRepository,
+) : CoroutineScope by viewModelScope {
+
+    interface Factory {
+        fun create(viewModelScope: CoroutineScope): GiftListViewModel
+    }
+
     enum class VisualState {
         DEFAULT,
         IN_PROGRESS,
     }
 
-    protected val openGiftEvent = PublishSubject.create<TextGift>()
+    protected val openGiftEvent = BufferingEvent<TextGift>()
 
-    protected val stateMutable = BehaviorSubject.create<VisualState>()
+    protected val stateMutable = MutableStateFlow(VisualState.DEFAULT)
 
-    protected val disposable = CompositeDisposable()
+    val state = stateMutable.asStateFlow()
 
-    val state: Observable<VisualState> = stateMutable
-    abstract val gifts: Observable<List<TextGift>>
+    abstract val gifts: StateFlow<List<TextGift>>
 
     fun onOpenGiftClick(giftToOpen: TextGift) {
         if (debounce) return
-        openGiftEvent.onNext(giftToOpen)
+        openGiftEvent.send(giftToOpen)
     }
 
     fun onDeleteButtonClick(giftToDelete: TextGift) {
         if (debounce) return
         giftRepository.deleteGift(giftToDelete.uuid)
     }
-
-    fun dispose() = disposable.dispose()
 }

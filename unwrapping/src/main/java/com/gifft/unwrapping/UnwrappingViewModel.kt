@@ -2,6 +2,8 @@ package com.gifft.unwrapping
 
 import android.net.Uri
 import com.gifft.core.debounce
+import com.gifft.core.events.asReceiveOnly
+import com.gifft.core.events.BufferingEvent
 import com.gifft.gift.api.GiftRepository
 import com.gifft.gift.api.GiftType
 import com.gifft.gift.api.TextGift
@@ -10,9 +12,8 @@ import com.gifft.unwrapping.api.UnwrappingNavParam
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class UnwrappingViewModel @AssistedInject constructor(
     @Assisted val navParam: UnwrappingNavParam,
@@ -29,21 +30,21 @@ class UnwrappingViewModel @AssistedInject constructor(
         IN_PROGRESS,
     }
 
-    private val stateMutable = BehaviorSubject.create<VisualState>()
-    private val _senderSubject = BehaviorSubject.create<String>()
-    private val _receiverSubject = BehaviorSubject.create<String>()
-    private val _giftContentSubject = BehaviorSubject.create<String>()
+    private val _state = MutableStateFlow(VisualState.DEFAULT)
+    private val _sender = MutableStateFlow("")
+    private val _receiver = MutableStateFlow("")
+    private val _giftContent = MutableStateFlow("")
 
-    private val _fatalError = PublishSubject.create<String>()
-    private val _goHomeCommand = PublishSubject.create<Unit>()
+    private val _fatalError = BufferingEvent<String>()
+    private val _goHomeCommand = BufferingEvent(bufferLimit = 1)
 
-    val state: Observable<VisualState> = stateMutable
-    val sender: Observable<String> = _senderSubject
-    val receiver: Observable<String> = _receiverSubject
-    val giftContent: Observable<String> = _giftContentSubject
+    val state = _state.asStateFlow()
+    val sender = _sender.asStateFlow()
+    val receiver = _receiver.asStateFlow()
+    val giftContent = _giftContent.asStateFlow()
 
-    val goHomeCommand: Observable<Unit> = _goHomeCommand
-    val fatalError: Observable<String> = _fatalError
+    val goHomeCommand = _goHomeCommand.asReceiveOnly()
+    val fatalError = _fatalError.asReceiveOnly()
 
     suspend fun init() {
         val link = Uri.parse(navParam.uriOrUuid)
@@ -52,7 +53,7 @@ class UnwrappingViewModel @AssistedInject constructor(
         val gift: TextGift?
 
         if (link.host != null) {
-            stateMutable.onNext(VisualState.IN_PROGRESS)
+            _state.value = VisualState.IN_PROGRESS
 
             val linkGift = giftLinkBuilder.parse(link)
             existingGift = linkGift?.let { giftRepository.findGift(it.uuid) }
@@ -63,7 +64,7 @@ class UnwrappingViewModel @AssistedInject constructor(
         }
 
         if (gift == null) {
-            _fatalError.onNext("Could not open the gift. Please try again.")
+            _fatalError.send("Could not open the gift. Please try again.")
             return
         }
 
@@ -71,15 +72,15 @@ class UnwrappingViewModel @AssistedInject constructor(
             giftRepository.saveTextGift(gift)
         }
 
-        _senderSubject.onNext(gift.sender)
-        _receiverSubject.onNext(gift.receiver)
-        _giftContentSubject.onNext(gift.text)
+        _sender.value = gift.sender
+        _receiver.value = gift.receiver
+        _giftContent.value = gift.text
 
-        stateMutable.onNext(VisualState.DEFAULT)
+        _state.value = VisualState.DEFAULT
     }
 
     fun onGoToAllGiftsClick() {
         if (debounce) return
-        _goHomeCommand.onNext(Unit)
+        _goHomeCommand.send()
     }
 }

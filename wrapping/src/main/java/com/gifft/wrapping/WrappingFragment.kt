@@ -15,8 +15,10 @@ import com.gifft.core.viewbindingholder.viewBind
 import com.gifft.wrapping.api.WrappingNavParam
 import com.gifft.wrapping.databinding.WrappingFragmentBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.jakewharton.rxbinding3.view.clicks
-import com.jakewharton.rxbinding3.widget.textChanges
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
+import reactivecircus.flowbinding.android.view.clicks
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 internal class WrappingFragment @Inject constructor(
@@ -63,9 +65,9 @@ internal class WrappingFragment @Inject constructor(
 
         sendButton.clicks() observe viewModel::onSendGiftClick
 
-        sender.textChanges().skip(1).map { it.toString() } observe viewModel.senderInput
-        receiver.textChanges().skip(1).map { it.toString() } observe viewModel.receiverInput
-        giftText.textChanges().skip(1).map { it.toString() } observe viewModel.giftContentInput
+        sender.textChanges().skipInitialValue().map { it.toString() } observe viewModel::onSenderInput
+        receiver.textChanges().skipInitialValue().map { it.toString() } observe viewModel::onReceiverInput
+        giftText.textChanges().skipInitialValue().map { it.toString() } observe viewModel::onGiftContentInput
 
         viewModel.shareGiftLinkCommand observe { link ->
             startActivity(Intent.createChooser(Intent().apply {

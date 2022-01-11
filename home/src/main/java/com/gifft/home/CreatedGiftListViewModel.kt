@@ -1,33 +1,44 @@
 package com.gifft.home
 
+import com.gifft.core.events.asFlow
 import com.gifft.gift.api.GiftRepository
 import com.gifft.gift.api.TextGift
 import com.gifft.wrapping.api.WrappingNavParam
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.subjects.BehaviorSubject
-import javax.inject.Inject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectIndexed
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
-class CreatedGiftListViewModel @Inject constructor(
-    giftRepository: GiftRepository
-) : GiftListViewModel(giftRepository) {
-    private val _createdGifts = BehaviorSubject.create<List<TextGift>>()
+class CreatedGiftListViewModel @AssistedInject constructor(
+    @Assisted viewModelScope: CoroutineScope,
+    private val giftRepository: GiftRepository,
+) : GiftListViewModel(viewModelScope, giftRepository) {
 
-    override val gifts: Observable<List<TextGift>> = _createdGifts
-
-    init {
-        stateMutable.onNext(VisualState.IN_PROGRESS)
-
-        _createdGifts
-            .take(1)
-            .subscribe { stateMutable.onNext(VisualState.DEFAULT) }
-            .addTo(disposable)
-
-        giftRepository.allCreatedGifts()
-            .doOnSubscribe { disposable.add(it) }
-            .subscribe(_createdGifts)
+    @AssistedFactory
+    interface Factory : GiftListViewModel.Factory {
+        override fun create(viewModelScope: CoroutineScope): CreatedGiftListViewModel
     }
 
-    val openGiftCommand: Observable<WrappingNavParam> = openGiftEvent
-        .map { WrappingNavParam(it.uuid) }
+    private val _createdGifts = MutableStateFlow<List<TextGift>>(emptyList())
+    override val gifts = _createdGifts.asStateFlow()
+
+    init {
+        launch {
+            stateMutable.value = VisualState.IN_PROGRESS
+            giftRepository.allCreatedGifts().collectIndexed { index, textGift ->
+                _createdGifts.value = textGift
+
+                if (index == 0) {
+                    stateMutable.value = VisualState.DEFAULT
+                }
+            }
+        }
+    }
+
+    val openGiftCommand = openGiftEvent.asFlow().map { WrappingNavParam(it.uuid) }
 }

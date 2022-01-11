@@ -33,7 +33,6 @@ dependencies {
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
     implementation "com.google.android.material:material:${versions.material}"
     implementation "androidx.fragment:fragment-ktx:${versions.fragment}"
-    implementation "io.reactivex.rxjava2:rxjava:${versions.rxjava2}"
 
     implementation "com.google.dagger:dagger:${versions.dagger}"
 }

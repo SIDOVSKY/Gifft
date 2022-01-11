@@ -12,8 +12,9 @@ import com.gifft.core.viewbindingholder.viewBind
 import com.gifft.gift_ui.GiftLayout
 import com.gifft.unwrapping.api.UnwrappingNavParam
 import com.gifft.unwrapping.databinding.UnwrappingFragmentBinding
-import com.jakewharton.rxbinding3.view.clicks
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import reactivecircus.flowbinding.android.view.clicks
 import javax.inject.Inject
 
 internal class UnwrappingFragment @Inject constructor(

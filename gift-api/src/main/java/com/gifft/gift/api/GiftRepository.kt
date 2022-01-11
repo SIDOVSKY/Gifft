@@ -1,10 +1,10 @@
 package com.gifft.gift.api
 
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.Flow
 
 interface GiftRepository {
-    fun allReceivedGifts() : Observable<List<TextGift>>
-    fun allCreatedGifts(): Observable<List<TextGift>>
+    fun allReceivedGifts() : Flow<List<TextGift>>
+    fun allCreatedGifts(): Flow<List<TextGift>>
 
     fun saveTextGift(gift: TextGift)
     fun findGift(uuid: String) : TextGift?

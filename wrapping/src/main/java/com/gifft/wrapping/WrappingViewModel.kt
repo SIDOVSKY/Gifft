@@ -1,20 +1,20 @@
 package com.gifft.wrapping
 
+import com.gifft.core.events.BufferingEvent
+import com.gifft.core.events.asReceiveOnly
 import com.gifft.core.debounce
 import com.gifft.gift.api.GiftRepository
 import com.gifft.gift.api.GiftType
 import com.gifft.gift.api.TextGift
 import com.gifft.gift.api.TextGiftLinkBuilder
 import com.gifft.wrapping.api.WrappingNavParam
-import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.reactivex.Observable
-import io.reactivex.functions.Consumer
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -34,66 +34,64 @@ class WrappingViewModel @AssistedInject constructor(
         IN_PROGRESS,
     }
 
-    private val stateMutable = BehaviorSubject.create<VisualState>()
-    private val _senderRelay = BehaviorRelay.createDefault("")
-    private val _receiverRelay = BehaviorRelay.createDefault("")
-    private val _giftContentRelay = BehaviorRelay.createDefault("")
-
-    private val _shareGiftLinkSubject = PublishSubject.create<String>()
-    private val _showErrorSubject = PublishSubject.create<String>()
-
     private val _originalGift = navParam.existingGiftUuid?.let {
         giftRepository.findGift(it)
     }
 
-    private val _isSentSubject =
-        BehaviorSubject.createDefault(_originalGift?.type == GiftType.Sent)
+    private val _state = MutableStateFlow(VisualState.DEFAULT)
+    private val _isSent = MutableStateFlow(_originalGift?.type == GiftType.Sent)
+    private val _sender = MutableStateFlow(_originalGift?.sender.orEmpty())
+    private val _receiver = MutableStateFlow(_originalGift?.receiver.orEmpty())
+    private val _giftContent = MutableStateFlow(_originalGift?.text.orEmpty())
 
-    init {
-        _originalGift?.let {
-            _senderRelay.accept(it.sender)
-            _receiverRelay.accept(it.receiver)
-            _giftContentRelay.accept(it.text)
-        }
-    }
+    private val _showErrorEvent = BufferingEvent<String>()
+    private val _shareGiftLinkEvent = BufferingEvent<String>()
 
-    val state: Observable<VisualState> = stateMutable
-    val editingEnabled: Observable<Boolean> = _isSentSubject.map { !it }
-    val sendButtonVisible: Observable<Boolean> = _isSentSubject.map { !it }
-    val sentLabelVisible: Observable<Boolean> = _isSentSubject
-    val sender: Observable<String> = _senderRelay.distinctUntilChanged()
-    val receiver: Observable<String> = _receiverRelay.distinctUntilChanged()
-    val giftContent: Observable<String> = _giftContentRelay.distinctUntilChanged()
+    val state = _state.asStateFlow()
+    val editingEnabled = _isSent.map { !it }
+    val sendButtonVisible = _isSent.map { !it }
+    val sentLabelVisible = _isSent.asStateFlow()
+    val sender = _sender.asStateFlow()
+    val receiver = _receiver.asStateFlow()
+    val giftContent = _giftContent.asStateFlow()
     val sentDate: String = java.text.SimpleDateFormat.getDateInstance().format(_originalGift?.date ?: Date())
 
-    val showErrorCommand: Observable<String> = _showErrorSubject
-    val shareGiftLinkCommand: Observable<String> = _shareGiftLinkSubject
-
-    val senderInput: Consumer<String> = _senderRelay
-    val receiverInput: Consumer<String> = _receiverRelay
-    val giftContentInput: Consumer<String> = _giftContentRelay
+    val showErrorCommand = _showErrorEvent.asReceiveOnly()
+    val shareGiftLinkCommand = _shareGiftLinkEvent.asReceiveOnly()
 
     val exitMode: ExitMode
         get() {
             val newGift = _originalGift == null
-            val emptyContent = _senderRelay.value.isNullOrBlank()
-                    && _receiverRelay.value.isNullOrBlank()
-                    && _giftContentRelay.value.isNullOrBlank()
+            val emptyContent = _sender.value.isBlank()
+                    && _receiver.value.isBlank()
+                    && _giftContent.value.isBlank()
 
             val originalGiftChanged = _originalGift?.run {
-                sender != _senderRelay.value
-                        || receiver != _receiverRelay.value
-                        || text != _giftContentRelay.value
+                sender != _sender.value
+                        || receiver != _receiver.value
+                        || text != _giftContent.value
             } ?: false
 
             return when {
-                _isSentSubject.value ?: false -> ExitMode.NoChanges
+                _isSent.value -> ExitMode.NoChanges
                 newGift && !emptyContent -> ExitMode.New
                 !newGift && emptyContent -> ExitMode.Cleaned
                 originalGiftChanged -> ExitMode.Edited
                 else -> ExitMode.NoChanges
             }
         }
+
+    fun onSenderInput(newSender: String) {
+        _sender.value = newSender
+    }
+
+    fun onReceiverInput(newReceiver: String) {
+        _receiver.value = newReceiver
+    }
+
+    fun onGiftContentInput(newGiftContent: String) {
+        _giftContent.value = newGiftContent
+    }
 
     fun onSendGiftClick() {
         if (debounce) return
@@ -113,27 +111,27 @@ class WrappingViewModel @AssistedInject constructor(
     private fun sendGift() {
         val gift = dumpGift().copy(type = GiftType.Sent)
 
-        if (_senderRelay.value.isNullOrBlank()
-            || _receiverRelay.value.isNullOrBlank()
-            || _giftContentRelay.value.isNullOrBlank()
+        if (_sender.value.isBlank()
+            || _receiver.value.isBlank()
+            || _giftContent.value.isBlank()
         ) {
-            _showErrorSubject.onNext("Cannot send unfinished gift. Please fill every field.")
+            _showErrorEvent.send("Cannot send unfinished gift. Please fill every field.")
             return
         }
 
         launch {
-            stateMutable.onNext(VisualState.IN_PROGRESS)
+            _state.value = VisualState.IN_PROGRESS
             val link = giftLinkBuilder.build(gift)
-            stateMutable.onNext(VisualState.DEFAULT)
+            _state.value = VisualState.DEFAULT
 
             if (link == null) {
-                _showErrorSubject.onNext("Failed to prepare a link. Please try again.")
+                _showErrorEvent.send("Failed to prepare a link. Please try again.")
                 return@launch
             }
 
             saveGift(gift)
-            _shareGiftLinkSubject.onNext(link)
-            _isSentSubject.onNext(true)
+            _shareGiftLinkEvent.send(link)
+            _isSent.value = true
         }
 
     }
@@ -146,11 +144,11 @@ class WrappingViewModel @AssistedInject constructor(
 
     private fun dumpGift() = TextGift(
         _originalGift?.uuid ?: UUID.randomUUID().toString(),
-        _senderRelay.value ?: "",
-        _receiverRelay.value ?: "",
+        _sender.value,
+        _receiver.value,
         _originalGift?.date ?: Date(),
         _originalGift?.type ?: GiftType.Created,
-        _giftContentRelay.value ?: ""
+        _giftContent.value
     )
 
     private fun deleteGift() {

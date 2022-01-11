@@ -4,9 +4,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle.Event
 import androidx.lifecycle.Lifecycle.State
 import androidx.lifecycle.LifecycleOwner
+import com.gifft.core.events.EventSource
 import com.gifft.core.lifecyclehooks.letAfter
-import io.reactivex.Observable
-import io.reactivex.functions.Consumer
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KFunction0
 
@@ -34,26 +38,43 @@ import kotlin.reflect.KFunction0
  * @throws IllegalStateException Used on the non-LifecycleOwner type.
  * @throws IllegalStateException Subscribing after onResume.
  */
-interface LifecycleAwareSubscriber : RxJavaLifecycleAwareSubscriber
+interface LifecycleAwareSubscriber : FlowLifecycleAwareSubscriber, EventSourceLifecycleAwareSubscriber
 
-interface RxJavaLifecycleAwareSubscriber : LifecycleAwareSubscriberBase {
-    infix fun <T> Observable<T>.observe(onNext: (T) -> Unit) =
+interface FlowLifecycleAwareSubscriber : LifecycleAwareSubscriberBase {
+    infix fun <T> Flow<T>.observe(onNext: (T) -> Unit) =
+        collectOnMainThread(source = this, onNext)
+
+    infix fun <T> Flow<T>.observe(property: KMutableProperty0<T>) =
+        collectOnMainThread(source = this, property::set)
+
+    infix fun <T> Flow<T>.observe(onNext: KFunction0<Unit>) =
+        collectOnMainThread(source = this) { onNext() }
+
+    private fun <T> collectOnMainThread(source: Flow<T>, onNext: (T) -> Unit) {
+        val job = CoroutineScope(Dispatchers.Main.immediate).launch {
+            source.collect { newValue ->
+                onNext(newValue)
+            }
+        }
+        scheduleDisposeWithLifecycle(job::cancel)
+    }
+}
+
+interface EventSourceLifecycleAwareSubscriber : LifecycleAwareSubscriberBase {
+    infix fun <T> EventSource<T>.observe(onNext: (T) -> Unit) =
         observeOnMainThread(source = this, onNext)
 
-    infix fun <T> Observable<T>.observe(property: KMutableProperty0<T>) =
+    infix fun <T> EventSource<T>.observe(property: KMutableProperty0<T>) =
         observeOnMainThread(source = this, property::set)
 
-    infix fun <T> Observable<T>.observe(onNext: KFunction0<Unit>) =
+    infix fun <T> EventSource<T>.observe(onNext: KFunction0<Unit>) =
         observeOnMainThread(source = this) { onNext() }
 
-    infix fun <T> Observable<T>.observe(consumer: Consumer<T>) =
-        observeOnMainThread(source = this, consumer::accept)
-
-    private fun <T> observeOnMainThread(source: Observable<T>, onNext: (T) -> Unit) {
-        val disposable = source.subscribe { newValue ->
+    private fun <T> observeOnMainThread(source: EventSource<T>, onNext: (T) -> Unit) {
+        val unsubscribe = source.subscribe { newValue ->
             invokeOnMainThread { onNext(newValue) }
         }
-        scheduleDisposeWithLifecycle(disposable::dispose)
+        scheduleDisposeWithLifecycle(unsubscribe)
     }
 }
 
