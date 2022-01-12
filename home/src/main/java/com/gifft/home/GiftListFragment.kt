@@ -18,9 +18,7 @@ internal abstract class GiftListFragment(
     newViewModel: GiftListViewModel.Factory
 ) : Fragment(R.layout.gift_list_fragment), LifecycleAwareSubscriber {
 
-    protected open val viewModel by retain { retainScope ->
-        newViewModel.create(retainScope)
-    }
+    protected open val viewModel by retain { newViewModel.create(retainScope) }
 
     protected abstract val giftListAdapter: ListAdapter<TextGift, *>
 

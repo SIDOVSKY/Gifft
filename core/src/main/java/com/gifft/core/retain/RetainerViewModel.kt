@@ -1,16 +1,25 @@
 package com.gifft.core.retain
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 
-typealias Object = Any
-typealias ObjectClearDelegate = (() -> Unit?)
+typealias onClearDelegate = () -> Unit?
 
-class RetainerViewModel : ViewModel() {
-    val retainedObjects = HashMap<String, Pair<Object, ObjectClearDelegate>>()
+internal class RetainerViewModel : ViewModel(), RetainContext {
+    private val onClearDelegates = mutableSetOf<onClearDelegate>()
+
+    val retainedObjects = HashMap<String, Any>()
+
+    override val retainScope = viewModelScope
+
+    override fun doOnClear(delegate: () -> Unit?) {
+        onClearDelegates.add(delegate)
+    }
 
     override fun onCleared() {
         super.onCleared()
-        retainedObjects.values.forEach { it.second.invoke() }
+        onClearDelegates.forEach { it.invoke() }
+        onClearDelegates.clear()
         retainedObjects.clear()
     }
 }

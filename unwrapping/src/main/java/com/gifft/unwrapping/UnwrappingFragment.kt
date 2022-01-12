@@ -10,7 +10,6 @@ import com.gifft.core.requireNavParam
 import com.gifft.core.retain.retain
 import com.gifft.core.viewbindingholder.viewBind
 import com.gifft.gift_ui.GiftLayout
-import com.gifft.unwrapping.api.UnwrappingNavParam
 import com.gifft.unwrapping.databinding.UnwrappingFragmentBinding
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -21,8 +20,8 @@ internal class UnwrappingFragment @Inject constructor(
     viewModelFactory: UnwrappingViewModel.Factory
 ) : Fragment(R.layout.unwrapping_fragment), LifecycleAwareSubscriber {
 
-    private val viewModel by retain { retainScope ->
-        viewModelFactory.create(requireNavParam<UnwrappingNavParam>()).also { viewModel ->
+    private val viewModel by retain {
+        viewModelFactory.create(requireNavParam()).also { viewModel ->
             retainScope.launch { viewModel.init() }
         }
     }

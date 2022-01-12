@@ -12,7 +12,6 @@ import com.gifft.core.LifecycleAwareSubscriber
 import com.gifft.core.requireNavParam
 import com.gifft.core.retain.retain
 import com.gifft.core.viewbindingholder.viewBind
-import com.gifft.wrapping.api.WrappingNavParam
 import com.gifft.wrapping.databinding.WrappingFragmentBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.filter
@@ -25,8 +24,8 @@ internal class WrappingFragment @Inject constructor(
     viewModelFactory: WrappingViewModel.Factory
 ) : Fragment(R.layout.wrapping_fragment), LifecycleAwareSubscriber {
 
-    private val viewModel by retain { retainScope ->
-        viewModelFactory.create(requireNavParam<WrappingNavParam>(), retainScope)
+    private val viewModel by retain {
+        viewModelFactory.create(requireNavParam(), retainScope)
     }
 
     @VisibleForTesting

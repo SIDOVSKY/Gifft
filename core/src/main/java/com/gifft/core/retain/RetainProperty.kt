@@ -5,45 +5,35 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.get
-import androidx.lifecycle.viewModelScope
 import com.gifft.core.lifecyclehooks.letAfter
-import kotlinx.coroutines.CoroutineScope
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 /**
- * usage:
- * ```
- * private val viewModel by retain(
- *     producer = { NonAndroidViewModel() },
- *     onClean = { dispose() })
- * ```
- */
-fun <Owner, T : Any> Owner.retain(
-    producer: (retainScope: CoroutineScope) -> T,
-    onClean: (T.() -> Unit)
-): ReadOnlyProperty<Owner, T>
-        where Owner : ViewModelStoreOwner,
-              Owner : LifecycleOwner =
-    RetainProperty(this, producer, onClean)
-
-/**
- * usage:
+ * Retain property value between activity configuration changes.
+ *
+ * **Simple usage:**
  * ```
  * private val viewModel by retain { NonAndroidViewModel() }
  * ```
+ *
+ * **Advanced usage:**
+ * ```
+ * private val viewModel by retain {
+ *     NonAndroidViewModel(coroutineScope = retainScope).apply {
+ *         doOnClear { dispose() }
+ *     }
+ * }
+ * ```
  */
-fun <Owner, T : Any> Owner.retain(
-    producer: (retainScope: CoroutineScope) -> T
-): ReadOnlyProperty<Owner, T>
+fun <Owner, T : Any> Owner.retain(create: RetainContext.() -> T): ReadOnlyProperty<Owner, T>
         where Owner : ViewModelStoreOwner,
               Owner : LifecycleOwner =
-    RetainProperty(this, producer, null)
+    RetainProperty(this, create)
 
 private class RetainProperty<Owner, T : Any>(
     owner: Owner,
-    private val producer: (retainScope: CoroutineScope) -> T,
-    private val clearer: (T.() -> Unit)? = null
+    private val create: RetainContext.() -> T,
 ) : ReadOnlyProperty<ViewModelStoreOwner, T>
         where Owner : ViewModelStoreOwner,
               Owner : LifecycleOwner {
@@ -64,24 +54,14 @@ private class RetainProperty<Owner, T : Any>(
     }
 
     override fun getValue(thisRef: ViewModelStoreOwner, property: KProperty<*>): T {
-        val value = cached
+        cached?.let { return it }
 
-        return if (value == null) {
-            if (!::retainer.isInitialized) {
-                retainer = ViewModelProvider(thisRef).get()
-            }
-
-            @Suppress("UNCHECKED_CAST")
-            val retainedValue = retainer.retainedObjects[property.name]?.first as? T
-                ?: producer.invoke(retainer.viewModelScope).also { retainValue ->
-                    retainer.retainedObjects[property.name] = Pair(retainValue, { clearer?.invoke(retainValue) })
-                }
-
-            cached = retainedValue
-
-            retainedValue
-        } else {
-            value
+        if (!::retainer.isInitialized) {
+            retainer = ViewModelProvider(thisRef).get()
         }
+
+        @Suppress("UNCHECKED_CAST")
+        val retainValue = retainer.retainedObjects.getOrPut(key = property.name) { create(retainer) } as T
+        return retainValue.also { cached = it }
     }
 }
