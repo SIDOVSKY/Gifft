@@ -5,9 +5,7 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.annotation.IdRes
-import androidx.lifecycle.Lifecycle
 import androidx.viewbinding.ViewBinding
-import com.gifft.core.lifecyclehooks.letAfter
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -22,29 +20,19 @@ private class ActivityViewBindingPropertyDelegate<T : ViewBinding>(
         viewBinding?.let { return it }
 
         val contentView = thisRef.findViewById<View>(contentViewId) as? ViewGroup
-            ?: throw IllegalStateException("Could not find a view in $thisRef")
-
-        if (contentView.childCount == 0)
+        if (contentView == null || contentView.childCount == 0)
             throw IllegalStateException("Could not find a view in $thisRef")
 
         if (contentView.childCount != 1)
             throw IllegalStateException("Unexpected activity child count")
 
         val view = contentView.getChildAt(0)
-
-        val binding = bindView(view).also { viewBinding = it }
-
-        thisRef.letAfter(Lifecycle.Event.ON_DESTROY) {
-            viewBinding = null
-        }
-
-        return binding
+        return bindView(view).also { viewBinding = it }
     }
 }
 
 /**
- * Create new [ViewBinding] associated with the [ComponentActivity] and allow customize how
- * a [View] will be bounded to the view binding.
+ * Creates a [ViewBinding] associated with the [ComponentActivity].
  *
  * Usage:
  * ```

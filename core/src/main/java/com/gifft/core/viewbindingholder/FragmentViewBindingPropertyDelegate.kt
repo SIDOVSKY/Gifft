@@ -1,16 +1,14 @@
 package com.gifft.core.viewbindingholder
 
-import android.os.Handler
-import android.os.Looper
 import android.view.View
-import androidx.annotation.MainThread
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 import androidx.viewbinding.ViewBinding
-import com.gifft.core.ensureMainThread
+import com.gifft.core.invokeOnMainThread
 import com.gifft.core.lifecyclehooks.letAfter
+import com.gifft.core.mainThreadHandler
 
 private class FragmentViewBindingPropertyDelegate<T : ViewBinding>(
     private val bindView: (View) -> T
@@ -21,34 +19,38 @@ private class FragmentViewBindingPropertyDelegate<T : ViewBinding>(
     /**
      * First access to the binding must be done on the main thread!
      */
-    @MainThread
     override fun getValue(thisRef: Fragment, property: KProperty<*>): T? {
         viewBinding?.let { return it }
 
-        ensureMainThread { "First access to the binding must be done on the main thread!" }
-
-        val view = thisRef.requireView()
+        val view = thisRef.view ?: return null
 
         viewBinding = bindView(view)
-
-        //To not leak memory
-        thisRef.viewLifecycleOwner.letAfter(Lifecycle.Event.ON_DESTROY) {
-            // Fragment.viewLifecycleOwner call LifecycleObserver.onDestroy()
-            // before Fragment.onDestroyView().
-            // That's why we need to postpone reset of the viewBinding
-            Handler(Looper.getMainLooper()).post {
-                viewBinding = null
-            }
-        }
+        schedulePropertyClearingAfterViewDestroyed(propertyOwner = thisRef)
 
         return viewBinding
+    }
+
+    private fun schedulePropertyClearingAfterViewDestroyed(propertyOwner: Fragment) {
+        invokeOnMainThread {
+            if (propertyOwner.view == null) {
+                viewBinding = null
+                return@invokeOnMainThread
+            }
+
+            propertyOwner.viewLifecycleOwner.letAfter(Lifecycle.Event.ON_DESTROY) {
+                // Fragment.viewLifecycleOwner calls LifecycleObserver.onDestroy()
+                // before Fragment.onDestroyView().
+                // That's why we need to postpone reset of the viewBinding.
+                mainThreadHandler.post {
+                    viewBinding = null
+                }
+            }
+        }
     }
 }
 
 /**
- * Create new [ViewBinding] associated with the [Fragment]
- *
- * First access to the binding must be done on the main thread!
+ * Creates a [ViewBinding] associated with the [Fragment].
  *
  * Usage:
  * ```
@@ -62,5 +64,4 @@ private class FragmentViewBindingPropertyDelegate<T : ViewBinding>(
 @Suppress("unused")
 fun <T : ViewBinding> Fragment.viewBind(
     bindView: (View) -> T
-): ReadOnlyProperty<Fragment, T?> =
-    FragmentViewBindingPropertyDelegate(bindView)
+): ReadOnlyProperty<Fragment, T?> = FragmentViewBindingPropertyDelegate(bindView)
