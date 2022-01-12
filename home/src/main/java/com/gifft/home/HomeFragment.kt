@@ -10,7 +10,7 @@ import com.gifft.core.LifecycleAwareSubscriber
 import com.gifft.core.ViewPager2FragmentClassesAdapter
 import com.gifft.core.retain.retain
 import com.gifft.core.toNavBundle
-import com.gifft.core.viewbindingholder.viewBind
+import com.gifft.core.viewbinding.viewBind
 import com.gifft.home.databinding.HomeFragmentBinding
 import com.gifft.wrapping.api.WrappingFragmentProvider
 import com.gifft.wrapping.api.WrappingNavParam

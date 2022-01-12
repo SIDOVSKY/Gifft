@@ -9,7 +9,7 @@ import com.gifft.core.LifecycleAwareSubscriber
 import com.gifft.gift.api.TextGift
 import com.gifft.core.recycler.setAdapter
 import com.gifft.core.retain.retain
-import com.gifft.core.viewbindingholder.viewBind
+import com.gifft.core.viewbinding.viewBind
 import com.gifft.home.databinding.GiftListFragmentBinding
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map

@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import com.gifft.core.LifecycleAwareSubscriber
 import com.gifft.core.requireNavParam
 import com.gifft.core.retain.retain
-import com.gifft.core.viewbindingholder.viewBind
+import com.gifft.core.viewbinding.viewBind
 import com.gifft.wrapping.databinding.WrappingFragmentBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.filter

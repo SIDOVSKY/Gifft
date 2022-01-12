@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.gifft.core.LifecycleAwareSubscriber
 import com.gifft.core.requireNavParam
 import com.gifft.core.retain.retain
-import com.gifft.core.viewbindingholder.viewBind
+import com.gifft.core.viewbinding.viewBind
 import com.gifft.gift_ui.GiftLayout
 import com.gifft.unwrapping.databinding.UnwrappingFragmentBinding
 import kotlinx.coroutines.flow.map

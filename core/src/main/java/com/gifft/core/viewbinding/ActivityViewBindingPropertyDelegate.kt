@@ -1,4 +1,4 @@
-package com.gifft.core.viewbindingholder
+package com.gifft.core.viewbinding
 
 import android.view.View
 import android.view.ViewGroup
