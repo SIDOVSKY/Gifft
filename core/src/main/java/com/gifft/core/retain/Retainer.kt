@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 
 typealias onClearDelegate = () -> Unit?
 
-internal class RetainerViewModel : ViewModel(), RetainContext {
+internal class Retainer : ViewModel(), RetainContext {
     private val onClearDelegates = mutableSetOf<onClearDelegate>()
 
-    val retainedObjects = HashMap<String, Any>()
+    val retainedValues = HashMap<String, Any>()
 
     override val retainScope = viewModelScope
 
@@ -20,6 +20,6 @@ internal class RetainerViewModel : ViewModel(), RetainContext {
         super.onCleared()
         onClearDelegates.forEach { it.invoke() }
         onClearDelegates.clear()
-        retainedObjects.clear()
+        retainedValues.clear()
     }
 }

@@ -26,19 +26,19 @@ import kotlin.reflect.KProperty
  * }
  * ```
  */
-fun <Owner, T : Any> Owner.retain(create: RetainContext.() -> T): ReadOnlyProperty<Owner, T>
+fun <Owner, T : Any> Owner.retain(createValue: RetainContext.() -> T): ReadOnlyProperty<Owner, T>
         where Owner : ViewModelStoreOwner,
               Owner : LifecycleOwner =
-    RetainProperty(this, create)
+    RetainPropertyDelegate(this, createValue)
 
-private class RetainProperty<Owner, T : Any>(
+private class RetainPropertyDelegate<Owner, T : Any>(
     owner: Owner,
-    private val create: RetainContext.() -> T,
+    private val createValue: RetainContext.() -> T,
 ) : ReadOnlyProperty<ViewModelStoreOwner, T>
         where Owner : ViewModelStoreOwner,
               Owner : LifecycleOwner {
 
-    private lateinit var retainer: RetainerViewModel
+    private lateinit var retainer: Retainer
 
     private var cached: T? = null
 
@@ -61,7 +61,7 @@ private class RetainProperty<Owner, T : Any>(
         }
 
         @Suppress("UNCHECKED_CAST")
-        val retainValue = retainer.retainedObjects.getOrPut(key = property.name) { create(retainer) } as T
+        val retainValue = retainer.retainedValues.getOrPut(key = property.name) { createValue(retainer) } as T
         return retainValue.also { cached = it }
     }
 }
