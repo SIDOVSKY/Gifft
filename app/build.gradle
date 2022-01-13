@@ -110,6 +110,7 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit-ktx:${versions.junit_android}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
     androidTestImplementation "androidx.test:core-ktx:${versions.androidx_test}"
+    androidTestImplementation "androidx.test:monitor:${versions.androidx_test}"
     androidTestImplementation "io.github.kakaocup:kakao:${versions.kakao}"
 
     implementation project(':core')
